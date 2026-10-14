@@ -1,4 +1,4 @@
-"""Build app sources into the SD web root (sdcard_stage/sites) without touching sources.
+"""Build app sources into the SD web root (sites/) without touching sources.
 
 Static sites (about, notes, sniff) are authored directly in the web root and need no
 assembly. Only built apps listed in sites.json are compiled here: their build output is
@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 
 ROOT = Path(__file__).resolve().parents[1]
 CFG = json.loads((ROOT / "sites.json").read_text(encoding="utf-8"))
-WEB_ROOT = (ROOT / CFG.get("web_root", "sdcard_stage/sites")).resolve()
+WEB_ROOT = (ROOT / CFG.get("web_root", "sites")).resolve()
 BACKUP = ROOT / ".build-backups"
 MOUNT_OK = set("abcdefghijklmnopqrstuvwxyz0123456789-")
 
@@ -84,8 +84,7 @@ def main():
             print(f"  previous copy kept: {prev}")
 
     print(f"Web root ready: {WEB_ROOT}")
-    print("Deploy: copy the CONTENTS of sdcard_stage/ to the microSD root "
-          "(sites/, captive/, duck/).")
+    print("Deploy: copy sites/, captive/ and duck/ to the microSD root.")
 
 
 if __name__ == "__main__":

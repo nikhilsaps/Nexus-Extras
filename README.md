@@ -15,8 +15,8 @@ whatever is hosted. Add a site, add one entry, and it appears here automatically
 ## Sites
 
 Sites are listed in the order they appear in the launcher. Each one is a self-contained
-folder or file under `sdcard_stage/sites/` and keeps its own look. New sites get their own
-section and screenshot below.
+folder or file under `sites/` and keeps its own look. New sites get their own section and
+screenshot below.
 
 ### 1. Chess Master — `/chess/`
 
@@ -53,25 +53,24 @@ A tile linking to the firmware source. It opens off-device and needs internet.
 
 ```
 nexus-sites/
-  sdcard_stage/            # copy the CONTENTS of this to the microSD root
-    sites/                 # the web root the firmware serves (/sdcard/sites)
-      index.html           # the launcher (the home page shown above)
-      metadata.json        # the list of sites the launcher renders
-      about.html
-      notes/index.html
-      sniff/index.html
-      chess/               # Chess Master build output (from chess-master/)
-    captive/               # captive-portal pages (see Additions)
-    duck/                  # BadUSB / HID payloads (see Additions)
-  chess-master/            # Chess Master SOURCE (built into sites/chess)
-  scripts/assemble.py      # builds the apps in sites.json into the web root
-  sites.json               # which app sources get built, and where
-  docs/                    # screenshots and guides
+  sites/                 # the web root the firmware serves (/sdcard/sites)
+    index.html           # the launcher (the home page shown above)
+    metadata.json        # the list of sites the launcher renders
+    about.html
+    notes/index.html
+    sniff/index.html
+    chess/               # Chess Master build output (from chess-master/)
+  captive/               # captive-portal pages (see Additions)
+  duck/                  # BadUSB / HID payloads (see Additions)
+  chess-master/          # Chess Master SOURCE (built into sites/chess)
+  scripts/assemble.py    # builds the apps in sites.json into the web root
+  sites.json             # which app sources get built, and where
+  docs/                  # screenshots and guides
 ```
 
 ## Deploy to the Cardputer
 
-Copy the **contents** of `sdcard_stage/` to the root of the microSD card, so the card has
+Copy `sites/`, `captive/` and `duck/` to the root of the microSD card, so the card has
 `/sites`, `/captive` and `/duck` at its top level. The firmware serves `/sites` at
 `http://<device-ip>/`.
 
@@ -80,7 +79,7 @@ Copy the **contents** of `sdcard_stage/` to the root of the microSD card, so the
 The sites are just static files, so any static server works:
 
 ```sh
-cd sdcard_stage/sites
+cd sites
 python -m http.server 8000
 # open http://localhost:8000/
 ```
@@ -88,13 +87,13 @@ python -m http.server 8000
 ## Building the apps
 
 Static sites (About, Notes, Sniffer) need no build — they are authored directly in
-`sdcard_stage/sites/`. Apps that have a build step are listed in `sites.json` and compiled
-into the web root by:
+`sites/`. Apps that have a build step are listed in `sites.json` and compiled into the web
+root by:
 
 ```sh
 # build the app first (example: Chess Master)
 cd chess-master && npm install && npm run build && cd ..
-# then copy builds into sdcard_stage/sites/<mount>
+# then copy builds into sites/<mount>
 python scripts/assemble.py
 ```
 
@@ -104,11 +103,11 @@ also checks that every launcher link resolves inside the web root.
 
 ## Adding a new site
 
-1. Drop a static site into `sdcard_stage/sites/<name>/` (or build an app and register it in
+1. Drop a static site into `sites/<name>/` (or build an app and register it in
    `sites.json`).
-2. Add an entry to `sdcard_stage/sites/metadata.json` (`name`, `path`, `desc`, `icon`,
-   `tags`). Link folders with an explicit file, e.g. `/<name>/index.html` — the firmware
-   does not auto-index folders.
+2. Add an entry to `sites/metadata.json` (`name`, `path`, `desc`, `icon`, `tags`). Link
+   folders with an explicit file, e.g. `/<name>/index.html` — the firmware does not
+   auto-index folders.
 3. Add a screenshot under `docs/screenshots/<name>/` and a section to this README.
 
 See [`docs/ADDING-A-SITE.md`](docs/ADDING-A-SITE.md) and
