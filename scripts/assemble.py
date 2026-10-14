@@ -2,6 +2,7 @@
 from pathlib import Path
 import json
 import shutil
+from datetime import datetime, timezone
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "dist" / "sites"
@@ -27,14 +28,17 @@ def main():
             raise FileNotFoundError(f"Build {app['source']} first: {source}/index.html")
     metadata = json.loads((ROOT / "metadata.json").read_text(encoding="utf-8"))
     for site in metadata["sites"]:
-        if site["path"] not in {f"./{mount}/" for mount in mounts}:
-            raise ValueError(f"Launcher entry has no assembled app: {site['path']}")
+        link = site["path"]
+        if link.startswith(("https://", "http://")):
+            continue  # Launcher also supports clearly marked external sites.
+        if link not in {f"./{mount}/" for mount in mounts}:
+            raise ValueError(f"Launcher entry has no assembled app: {link}")
     if not OUT.parent.exists():
         OUT.parent.mkdir(parents=True)
     temp = ROOT / "dist" / "sites.next"
-    previous = ROOT / "dist" / "sites.previous"
-    if temp.exists() or previous.exists():
-        raise FileExistsError(f"Resolve existing staging or rollback first: {temp}, {previous}")
+    previous = ROOT / "dist" / ("sites.previous." + datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S-%f"))
+    if temp.exists():
+        raise FileExistsError(f"Resolve existing staging first: {temp}")
     temp.mkdir(parents=True)
     try:
         for name in ("index.html", "metadata.json"):
@@ -53,6 +57,8 @@ def main():
         if temp.exists():
             shutil.rmtree(temp)
     print(f"Assembled {len(entries)} app(s): {OUT}")
+    if previous.exists():
+        print(f"Previous build retained: {previous}")
     print("Copy the CONTENTS of this directory to a static web root or SD /sites/.")
 
 if __name__ == "__main__":

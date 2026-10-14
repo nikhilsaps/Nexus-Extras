@@ -63,7 +63,7 @@ For frontend development only:
 npm --prefix chess-master run dev
 ```
 
-The assembler replaces only generated `dist/sites/`. Build each app first; `sites.json` maps its output folder to its deployed URL.
+The assembler replaces only generated `dist/sites/` and retains dated previous builds under `dist/sites.previous.*` for rollback. Clean up old generated backups when you no longer need them. Build each app first; `sites.json` maps its output folder to its deployed URL.
 
 ## Repository layout
 

@@ -1,5 +1,5 @@
 // Service worker: cache the app shell + the Stockfish engine so the heavy .wasm
-// downloads once over the ESP's weak WiFi and then runs offline forever.
+// downloads once when served over HTTPS or localhost and can reload from cache.
 //
 // Strategy:
 //  - Engine files + vendored Oat: cache-first (they are large and immutable-ish).
@@ -7,7 +7,7 @@
 //  - Never cache /api/* (that's live data via the dumb host).
 
 const CACHE_PREFIX = 'chess-master-'
-const CACHE = CACHE_PREFIX + 'v2'
+const CACHE = CACHE_PREFIX + 'v3'
 
 // Precache the engine specifically; it is the expensive asset.
 const PRECACHE = [
@@ -52,26 +52,24 @@ self.addEventListener('fetch', (event) => {
   if (isEngineOrVendor) {
     // Cache-first for big immutable assets.
     event.respondWith(
-      caches.match(request).then(
-        (hit) =>
-          hit ||
-          fetch(request).then((res) => {
-            const copy = res.clone()
-            caches.open(CACHE).then((c) => c.put(request, copy)).catch(() => {})
-            return res
-          }),
-      ),
+      caches.open(CACHE).then(async (cache) => {
+        const hit = await cache.match(request)
+        if (hit) return hit
+        const res = await fetch(request)
+        if (res.ok) await cache.put(request, res.clone()).catch(() => {})
+        return res
+      }),
     )
     return
   }
 
   // Stale-while-revalidate for the app shell.
   event.respondWith(
-    caches.match(request).then((hit) => {
+    caches.open(CACHE).then(async (cache) => {
+      const hit = await cache.match(request)
       const fetchPromise = fetch(request)
-        .then((res) => {
-          const copy = res.clone()
-          caches.open(CACHE).then((c) => c.put(request, copy)).catch(() => {})
+        .then(async (res) => {
+          if (res.ok) await cache.put(request, res.clone()).catch(() => {})
           return res
         })
         .catch(() => hit)

@@ -7,7 +7,7 @@
 - Browser opened the assembled launcher at `/sites/`, followed the Chess tile to `/sites/chess/`, displayed Play and Learn, and opened `/sites/chess/index.html` explicitly.
 - Browser capture files in `docs/screenshots/` are real screenshots of that assembled local build.
 - Checked the built WASM asset responds with `application/wasm` from the local test server.
-- Service-worker cache-isolation regression passed; the Chess worker keeps other sites' cache names.
+- Service-worker cache-isolation regression passed for activation and fetch: Chess does not read or remove another app's cache and does not cache failed responses.
 
 ## Not claimed
 
@@ -15,4 +15,4 @@
 - Chess's `api/data/<name>` sync endpoint is not implemented by current Nexus firmware. Static play and IndexedDB work independently of optional sync.
 - Offline reloads require HTTPS or localhost for service-worker registration; Cardputer LAN HTTP does not qualify.
 - Visual smoke testing is not a complete check of chess rules, engine strength, accessibility or mobile support.
-- GitHub Pages hosting is separate from local repository assembly.
+- GitHub repository creation, publication, and GitHub Pages hosting are separate from local Git assembly.
