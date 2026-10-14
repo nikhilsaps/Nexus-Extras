@@ -48,6 +48,8 @@
   .tag{color:var(--muted);font-size:clamp(15px,1.7vw,18px);margin:0;line-height:1.5}
   .meta{color:var(--faint);font-size:13px;margin-top:14px;display:flex;align-items:center;gap:8px}
   .meta .pt{width:5px;height:5px;border-radius:50%;background:var(--faint)}
+  .group{width:100%}
+  .group + .group{margin-top:clamp(30px,3.4vw,44px)}
   .section{display:flex;align-items:baseline;justify-content:space-between;width:100%;margin:0 0 14px}
   .section h2{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0}
   .count{font-size:13px;color:var(--faint)}
@@ -99,14 +101,38 @@
     <p class="tag" id="tagline">Loading sites...</p>
     <p class="meta" id="meta"></p>
   </header>
-  <main>
-    <div class="section"><h2>Apps</h2><span class="count" id="count"></span></div>
-    <div class="grid" id="grid"></div>
+  <main id="main">
+    <section class="group" id="g-app" hidden>
+      <div class="section"><h2>Apps</h2><span class="count" id="count-app"></span></div>
+      <div class="grid" id="grid-app"></div>
+    </section>
+    <section class="group" id="g-tool" hidden>
+      <div class="section"><h2>Tools</h2><span class="count" id="count-tool"></span></div>
+      <div class="grid" id="grid-tool"></div>
+    </section>
   </main>
   <footer>Served from a microSD card over your LAN. Works in any browser.</footer>
   <script>
     const esc = s => String(s).replace(/[&<>"]/g, c =>
       ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const tile = s => {
+      const target = new URL(s.path || './', location.href);
+      if (!['http:', 'https:'].includes(target.protocol)) return null;
+      const a = document.createElement('a');
+      a.className = 'tile';
+      a.href = target.href;
+      const external = (s.path || '').startsWith('http');
+      if (external) { a.target = '_blank'; a.rel = 'noopener'; }
+      const tags = (s.tags || []).map(t => '<span>' + esc(t) + '</span>').join('');
+      a.innerHTML =
+        (external ? '<div class="ext" title="Opens in a new tab">\u2197</div>' : '') +
+        '<div class="ico">' + esc(s.icon || 'APP') + '</div>' +
+        '<div class="nm">' + esc(s.name || 'Untitled') + '</div>' +
+        '<div class="ds">' + esc(s.desc || '') + '</div>' +
+        (tags ? '<div class="tags">' + tags + '</div>' : '');
+      return a;
+    };
+    const label = (n, one, many) => n + ' ' + (n === 1 ? one : many);
     fetch('metadata.json', {cache:'no-store'})
       .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
       .then(m => {
@@ -116,33 +142,24 @@
         const meta = document.getElementById('meta');
         meta.innerHTML = 'v' + esc(String(m.version ?? '?')) +
           (m.updated ? '<span class="pt"></span>updated ' + esc(m.updated) : '');
-        const grid = document.getElementById('grid');
-        const sites = (m.sites || []);
-        let shown = 0;
-        sites.forEach(s => {
-          const target = new URL(s.path || './', location.href);
-          if (!['http:', 'https:'].includes(target.protocol)) return;
-          const a = document.createElement('a');
-          a.className = 'tile';
-          a.href = target.href;
-          const external = (s.path||'').startsWith('http');
-          if (external) { a.target = '_blank'; a.rel = 'noopener'; }
-          const tags = (s.tags||[]).map(t => '<span>'+esc(t)+'</span>').join('');
-          a.innerHTML =
-            (external ? '<div class="ext" title="Opens in a new tab">\u2197</div>' : '') +
-            '<div class="ico">' + esc(s.icon || 'APP') + '</div>' +
-            '<div class="nm">' + esc(s.name || 'Untitled') + '</div>' +
-            '<div class="ds">' + esc(s.desc || '') + '</div>' +
-            (tags ? '<div class="tags">' + tags + '</div>' : '');
-          grid.appendChild(a);
-          shown++;
+        const groups = {
+          app:  { grid: document.getElementById('grid-app'),  sec: document.getElementById('g-app'),  count: document.getElementById('count-app'),  one: 'app',  many: 'apps',  n: 0 },
+          tool: { grid: document.getElementById('grid-tool'), sec: document.getElementById('g-tool'), count: document.getElementById('count-tool'), one: 'tool', many: 'tools', n: 0 }
+        };
+        (m.sites || []).forEach(s => {
+          const g = groups[s.kind] || groups.app;
+          const a = tile(s);
+          if (!a) return;
+          g.grid.appendChild(a);
+          g.n++;
         });
-        document.getElementById('count').textContent = shown + (shown === 1 ? ' site' : ' sites');
+        Object.values(groups).forEach(g => {
+          if (g.n > 0) { g.sec.hidden = false; g.count.textContent = label(g.n, g.one, g.many); }
+        });
       })
       .catch(e => {
         document.getElementById('tagline').textContent = '';
-        document.querySelector('.section').remove();
-        document.getElementById('grid').outerHTML =
+        document.getElementById('main').innerHTML =
           '<div class="err">Could not load <code>metadata.json</code> (' + esc(e.message) +
           '). It must sit next to this file in <code>/sites</code> on the SD card.</div>';
       });

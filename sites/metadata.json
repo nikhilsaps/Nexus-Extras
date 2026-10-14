@@ -1,25 +1,20 @@
 {
   "host": "Nexus",
   "tagline": "Browser-powered games and tools, served off a microSD card over your LAN.",
-  "version": 3,
+  "version": 4,
   "updated": "2026-10-15",
   "sites": [
     {
       "name": "Chess Master",
+      "kind": "app",
       "path": "/chess/",
       "desc": "Play Stockfish, explore openings and practice tactics. The engine runs entirely in your browser.",
       "icon": "♞",
       "tags": ["game", "learning"]
     },
     {
-      "name": "WiFi Sniffer",
-      "path": "/sniff/index.html",
-      "desc": "Live probe and client logger. Needs Sniffer mode running on the device.",
-      "icon": "📡",
-      "tags": ["live", "wifi"]
-    },
-    {
       "name": "About Nexus",
+      "kind": "app",
       "path": "/about.html",
       "desc": "What this little web host is and how it works.",
       "icon": "ℹ️",
@@ -27,10 +22,27 @@
     },
     {
       "name": "Nexus on GitHub",
+      "kind": "app",
       "path": "https://github.com/nikhilsaps/Nexus",
       "desc": "Firmware source. Needs internet and opens off-device.",
       "icon": "🐙",
       "tags": ["external", "source"]
+    },
+    {
+      "name": "WiFi Sniffer",
+      "kind": "tool",
+      "path": "/sniff/index.html",
+      "desc": "Live probe and client logger. Needs Sniffer mode running on the device.",
+      "icon": "📡",
+      "tags": ["live", "wifi"]
+    },
+    {
+      "name": "Evil-Twin Pages",
+      "kind": "tool",
+      "path": "/captive/",
+      "desc": "Captive-portal page set for the evil-twin tool. Pages live here and are picked and served from the device.",
+      "icon": "🎣",
+      "tags": ["wifi", "on-device"]
     }
   ]
 }
