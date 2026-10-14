@@ -5,39 +5,93 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Nexus Site</title>
 <style>
-  :root{color-scheme:dark}
+  :root{
+    color-scheme:light;
+    --bg:#f6f7f9;
+    --bg-soft:#eef1f5;
+    --ink:#1b2330;
+    --muted:#5c6778;
+    --faint:#8b95a6;
+    --card:#ffffff;
+    --line:#e7eaf0;
+    --line-soft:#eef1f5;
+    --accent:#2f6bff;
+    --accent-soft:#eef3ff;
+    --pill:#f1f4f9;
+    --shadow:0 1px 2px rgba(16,24,40,.04),0 8px 24px rgba(16,24,40,.06);
+    --shadow-hover:0 2px 4px rgba(16,24,40,.06),0 18px 40px rgba(16,24,40,.12);
+  }
   *{box-sizing:border-box}
-  body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-    background:#0b1020;color:#e7ecf5;padding:28px 18px}
-  header{max-width:760px;margin:0 auto 22px}
-  h1{font-size:26px;margin:0 0 4px}
-  .tag{color:#9fb0d4;font-size:14px;margin:0}
-  .meta{color:#5f6f98;font-size:12px;margin-top:8px}
-  .grid{max-width:760px;margin:0 auto;display:grid;gap:14px;
-    grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
-  a.tile{display:block;text-decoration:none;color:inherit;background:#141b33;
-    border:1px solid #243055;border-radius:14px;padding:18px;transition:.15s}
-  a.tile:hover{border-color:#5b8cff;transform:translateY(-2px)}
-  a.tile:focus-visible{outline:3px solid #9fb0d4;outline-offset:4px}
+  html,body{height:100%}
+  body{
+    margin:0;min-height:100vh;width:100%;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 100% -10%,#eef3ff 0,transparent 55%),
+      radial-gradient(1000px 500px at -10% 110%,#f0fbf6 0,transparent 55%),
+      var(--bg);
+    padding:clamp(20px,4vw,56px);
+    display:flex;flex-direction:column;
+  }
+  header{width:100%;margin:0 0 clamp(20px,3vw,34px)}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:12px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;
+    color:var(--accent);background:var(--accent-soft);
+    border-radius:999px;padding:5px 12px;margin:0 0 14px
+  }
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  h1{font-size:clamp(28px,4vw,40px);line-height:1.1;margin:0 0 8px;letter-spacing:-.02em}
+  .tag{color:var(--muted);font-size:clamp(14px,1.6vw,17px);margin:0;max-width:60ch}
+  .meta{color:var(--faint);font-size:13px;margin-top:12px}
+  main{width:100%;flex:1}
+  .grid{
+    width:100%;display:grid;gap:clamp(14px,1.6vw,22px);
+    grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));
+  }
+  a.tile{
+    position:relative;display:flex;flex-direction:column;
+    text-decoration:none;color:inherit;background:var(--card);
+    border:1px solid var(--line);border-radius:22px;
+    padding:22px;box-shadow:var(--shadow);
+    transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+  }
+  a.tile:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:#d7deea}
+  a.tile:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  .ico{
+    width:52px;height:52px;border-radius:16px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;background:var(--accent-soft);color:var(--ink);
+    border:1px solid var(--line-soft);margin-bottom:16px;
+  }
+  .ext{position:absolute;top:20px;right:22px;color:var(--faint);font-size:14px}
+  .nm{font-size:19px;font-weight:650;margin:0 0 6px;letter-spacing:-.01em}
+  .ds{font-size:14px;color:var(--muted);line-height:1.5;margin:0}
+  .tags{margin-top:16px;display:flex;gap:7px;flex-wrap:wrap}
+  .tags span{
+    font-size:12px;color:var(--muted);background:var(--pill);
+    border-radius:999px;padding:4px 11px;
+  }
+  .err{
+    width:100%;background:#fff5f6;border:1px solid #f3cdd4;
+    border-radius:16px;padding:20px;color:#9b2740;font-size:14px;line-height:1.5;box-shadow:var(--shadow)
+  }
+  .err code{background:#fde8ec;border-radius:6px;padding:1px 6px}
+  footer{width:100%;margin-top:clamp(26px,4vw,44px);color:var(--faint);font-size:13px}
   @media(prefers-reduced-motion:reduce){a.tile{transition:none}a.tile:hover{transform:none}}
-  .ico{font-size:28px}
-  .nm{font-size:17px;font-weight:600;margin:8px 0 4px}
-  .ds{font-size:13px;color:#9fb0d4;line-height:1.4}
-  .tags{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
-  .tags span{font-size:11px;color:#8fa0c8;background:#0e1428;border:1px solid #2c3a63;
-    border-radius:999px;padding:2px 8px}
-  .err{max-width:760px;margin:0 auto;background:#2a1620;border:1px solid #5a2a3a;
-    border-radius:12px;padding:16px;color:#f3c7d2;font-size:14px}
-  footer{max-width:760px;margin:26px auto 0;color:#5f6f98;font-size:12px;text-align:center}
 </style>
 </head>
 <body>
   <header>
+    <span class="eyebrow"><span class="dot"></span>Nexus</span>
     <h1 id="host">Nexus Site</h1>
     <p class="tag" id="tagline">Loading sites...</p>
     <p class="meta" id="meta"></p>
   </header>
-  <div class="grid" id="grid"></div>
+  <main>
+    <div class="grid" id="grid"></div>
+  </main>
   <footer>Browser-powered games and tools. Hosted anywhere, including your Cardputer.</footer>
   <script>
     const esc = s => String(s).replace(/[&<>"]/g, c =>
@@ -45,25 +99,27 @@
     fetch('metadata.json', {cache:'no-store'})
       .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
       .then(m => {
-        document.title = m.host || 'LocalServe';
-        document.getElementById('host').textContent = m.host || 'LocalServe';
+        document.title = m.host || 'Nexus Site';
+        document.getElementById('host').textContent = m.host || 'Nexus Site';
         document.getElementById('tagline').textContent = m.tagline || '';
         document.getElementById('meta').textContent =
           'v' + (m.version ?? '?') + (m.updated ? ' - updated ' + m.updated : '');
         const grid = document.getElementById('grid');
         (m.sites || []).forEach(s => {
-          const a = document.createElement('a');
-          a.className = 'tile';
           const target = new URL(s.path || './', location.href);
           if (!['http:', 'https:'].includes(target.protocol)) return;
+          const a = document.createElement('a');
+          a.className = 'tile';
           a.href = target.href;
-          if ((s.path||'').startsWith('http')) { a.target = '_blank'; a.rel = 'noopener'; }
+          const external = (s.path||'').startsWith('http');
+          if (external) { a.target = '_blank'; a.rel = 'noopener'; }
           const tags = (s.tags||[]).map(t => '<span>'+esc(t)+'</span>').join('');
           a.innerHTML =
+            (external ? '<div class="ext" title="Opens in a new tab">\u2197</div>' : '') +
             '<div class="ico">' + esc(s.icon || 'APP') + '</div>' +
             '<div class="nm">' + esc(s.name || 'Untitled') + '</div>' +
             '<div class="ds">' + esc(s.desc || '') + '</div>' +
-            '<div class="tags">' + tags + '</div>';
+            (tags ? '<div class="tags">' + tags + '</div>' : '');
           grid.appendChild(a);
         });
       })
