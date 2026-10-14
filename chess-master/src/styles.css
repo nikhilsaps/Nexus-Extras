@@ -1,0 +1,747 @@
+/* App layout + chess-specific styling. Oat handles the component chrome
+ * (buttons, cards, badges, switches, meter); this file is the shell, the board
+ * area, and the few bespoke widgets (eval bar, graph). Light theme only. */
+
+.app {
+  width: 100%;
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 14px clamp(10px, 2vw, 24px) 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 100vh;
+  min-width: 0;
+}
+
+/* --- Top bar ----------------------------------------------------------------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  font-size: 1.9rem;
+  line-height: 1;
+  color: var(--primary);
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.tagline {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+/* Mode nav (Play / Learn) in the top bar. */
+.modenav {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  margin-right: 12px;
+}
+.modenav button {
+  min-width: 78px;
+  padding: 7px 16px;
+  font-weight: 700;
+}
+.modenav button.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+.status-pill {
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-full, 999px);
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  white-space: nowrap;
+}
+.status-pill.status-check { background: #fff4e5; color: var(--warning); }
+.status-pill.status-over { background: var(--accent); color: var(--primary); }
+.status-pill.status-thinking { background: var(--muted); color: var(--muted-foreground); }
+
+/* --- Main layout: board + sidebar, dense, responsive ------------------------- */
+/* Play: three columns — rating/stats | big board | tabbed panels + moves.
+   Fills the full width so there's no empty margin on wide screens. */
+.layout {
+  display: grid;
+  /* Fluid columns: left and right have sensible min/max but SHRINK with the
+     viewport (fr-based) so nothing overflows the body; the board takes the
+     middle. minmax(0,...) lets children shrink below their content width. */
+  grid-template-columns:
+    minmax(0, 0.9fr)
+    minmax(0, 2fr)
+    minmax(0, 1.1fr);
+  gap: 16px;
+  align-items: start;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+.layout > * {
+  min-width: 0; /* critical: prevents grid children from forcing overflow */
+}
+
+.layout .leftcol {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+@media (max-width: 1180px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+  }
+  .layout .leftcol {
+    display: contents; /* fold the left column into the sidebar flow */
+  }
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tabs button {
+  font-size: 0.8rem;
+  padding: 8px 4px;
+}
+
+button.small {
+  padding: 5px 12px;
+  font-size: 0.8rem;
+}
+
+.board-area {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* The row stretches to the full card width so the board can grow to fill it. */
+.board-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.board-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* --- Eval bar ---------------------------------------------------------------- */
+.eval-bar {
+  position: relative;
+  width: 22px;
+  border-radius: 6px;
+  background: #e2e8f0;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.eval-fill-white {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-top: 1px solid #cbd5e1;
+  transition: height 0.4s ease;
+}
+
+.eval-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 4px;
+  text-align: center;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--muted-foreground);
+}
+
+/* --- Sidebar ----------------------------------------------------------------- */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--muted-foreground);
+}
+
+/* --- Rating card ------------------------------------------------------------- */
+.rating-value {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 6px 0 8px;
+  color: var(--foreground);
+}
+.rating-unit {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  margin-left: 6px;
+}
+.rating-meter {
+  width: 100%;
+  height: 10px;
+}
+.rating-note {
+  margin: 8px 0 0;
+  font-size: 0.78rem;
+}
+
+/* --- Tabbed panel ------------------------------------------------------------ */
+.panel {
+  padding: 0;
+  overflow: hidden;
+}
+.tabs {
+  display: flex;
+  gap: 2px;
+  padding: 8px 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.tabs button {
+  flex: 1;
+  border-radius: 8px 8px 0 0;
+  font-size: 0.85rem;
+  padding: 8px 6px;
+}
+.tabs button.active {
+  background: var(--accent);
+  color: var(--primary);
+  font-weight: 700;
+}
+.panel-body {
+  padding: 14px 16px 16px;
+  min-height: 180px;
+}
+
+/* --- Controls ---------------------------------------------------------------- */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.range-field .field-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.84rem;
+  margin-bottom: 4px;
+}
+.field-val {
+  font-weight: 700;
+  color: var(--foreground);
+}
+.range-field input[type='range'] {
+  width: 100%;
+}
+.switch-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.86rem;
+}
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.button-row button {
+  flex: 1;
+  min-width: 90px;
+}
+.stats {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.stat-num {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+.stat-num.win { color: var(--success); }
+.stat-num.loss { color: var(--danger); }
+.stat-num.draw { color: var(--warning); }
+.stat-cap {
+  font-size: 0.68rem;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* --- Coach panel ------------------------------------------------------------- */
+.coach-empty { padding: 8px 0; }
+.coach { display: flex; flex-direction: column; gap: 10px; }
+.coach-move { font-size: 1.1rem; font-weight: 800; }
+.coach-cpl { margin: 0; font-size: 0.8rem; }
+.coach-reason {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+.coach-line {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  background: var(--faint);
+  border-radius: 8px;
+}
+.coach-line-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted-foreground);
+}
+.coach-pv {
+  font-size: 0.88rem;
+  color: var(--foreground);
+}
+
+/* --- Review graph ------------------------------------------------------------ */
+.review { display: flex; flex-direction: column; gap: 8px; }
+.eval-graph {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.eval-point {
+  fill: var(--primary);
+  cursor: pointer;
+  transition: r 0.1s;
+}
+.eval-point:hover,
+.eval-point:focus {
+  fill: var(--foreground);
+  outline: none;
+}
+.review-hint { margin: 0; font-size: 0.78rem; }
+.review-legend { font-size: 0.72rem; color: var(--muted-foreground); }
+.dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  vertical-align: middle;
+}
+.dot.white { background: #fff; border: 1px solid #cbd5e1; }
+.dot.black { background: #7d94b4; }
+
+/* --- Move list --------------------------------------------------------------- */
+.movelist {
+  max-height: 420px;
+  overflow-y: auto;
+  flex: 1;
+}
+.moves {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-variant-numeric: tabular-nums;
+}
+.moves li {
+  display: grid;
+  grid-template-columns: 34px 1fr 1fr;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+.moves li:nth-child(odd) { background: var(--faint); }
+.move-no { color: var(--muted-foreground); }
+.move.san { font-weight: 600; }
+
+/* --- Footer ------------------------------------------------------------------ */
+.appfoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.76rem;
+  padding-top: 4px;
+  margin-top: auto;
+}
+.sync-saved { color: var(--success); }
+.sync-offline { color: var(--warning); }
+
+.muted-foreground { color: var(--muted-foreground); }
+
+/* --- Engine thinking panel --------------------------------------------------- */
+.thinking { display: flex; flex-direction: column; gap: 12px; }
+.thinking-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.tstat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px;
+  background: var(--faint);
+  border-radius: 8px;
+}
+.tstat-val { font-size: 0.95rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.tstat-lab { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted-foreground); }
+.thinking-idle { margin: 4px 0; font-size: 0.86rem; }
+
+.candidates { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.candidate {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+}
+.candidate-top { display: flex; align-items: center; gap: 10px; }
+.candidate-rank {
+  width: 20px; height: 20px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--primary);
+  font-size: 0.72rem; font-weight: 800;
+}
+.candidate-score { font-weight: 800; font-variant-numeric: tabular-nums; min-width: 54px; }
+.candidate-move { font-weight: 700; }
+.candidate-bar {
+  height: 6px; margin: 7px 0;
+  background: #e2e8f0; border-radius: 3px; overflow: hidden;
+}
+.candidate-bar-fill { display: block; height: 100%; background: var(--primary); transition: width 0.25s ease; }
+.candidate-pv {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Learn mode (openings library) ------------------------------------------- */
+.learn-main { display: block; }
+.learn {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+@media (max-width: 920px) {
+  .learn { grid-template-columns: 1fr; }
+}
+
+.learn-list { max-height: 78vh; overflow-y: auto; }
+.learn-group { margin-top: 12px; }
+.learn-group:first-of-type { margin-top: 8px; }
+.learn-group-title {
+  margin: 0 0 4px;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted-foreground);
+}
+.learn-items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.learn-items button {
+  width: 100%;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  font-size: 0.86rem;
+  padding: 7px 10px;
+}
+.learn-items button.active { background: var(--accent); color: var(--primary); font-weight: 700; }
+.learn-color { font-size: 0.62rem; }
+
+.learn-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 380px);
+  gap: 18px;
+  align-items: start;
+}
+@media (max-width: 1120px) {
+  .learn-detail { grid-template-columns: 1fr; }
+}
+
+.learn-board { display: flex; flex-direction: column; gap: 12px; }
+.learn-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.learn-ply { font-size: 0.82rem; font-weight: 700; min-width: 54px; text-align: center; font-variant-numeric: tabular-nums; }
+.learn-moves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.learn-move {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.learn-move.played { background: var(--accent); color: var(--primary); border-color: var(--accent); }
+
+.learn-info { display: flex; flex-direction: column; gap: 12px; }
+.learn-name { margin: 0; font-size: 1.3rem; }
+.learn-toggle { display: flex; gap: 6px; }
+.learn-idea { margin: 0; font-size: 0.95rem; line-height: 1.5; }
+.learn-sub {
+  margin: 4px 0 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted-foreground);
+}
+.learn-plans { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 0.9rem; line-height: 1.4; }
+.learn-counterhint { margin: 0; font-size: 0.8rem; }
+
+/* --- Learn practice guidance ------------------------------------------------- */
+.practice-strength { margin-top: 2px; }
+.practice-status { display: flex; justify-content: center; min-height: 32px; align-items: center; }
+.status-pill.status-move { background: var(--accent); color: var(--primary); }
+
+.practice-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.76rem;
+}
+.progress-track {
+  flex: 1;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.guidance {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--success);
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: var(--faint);
+}
+.guidance-out { border-left-color: var(--warning); }
+.guidance-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.guidance-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted-foreground);
+}
+.guidance-move { font-size: 1.5rem; font-weight: 800; color: var(--foreground); }
+.guidance-note { margin: 8px 0 0; font-size: 0.92rem; line-height: 1.45; }
+
+/* --- Settings view ----------------------------------------------------------- */
+.settings-main { width: 100%; }
+.settings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+.settings-group { padding: 0; overflow: hidden; }
+.settings-group-head {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--faint);
+}
+.settings-group-title { margin: 0; font-size: 1rem; }
+.settings-group-desc { margin: 2px 0 0; font-size: 0.8rem; }
+.settings-rows { display: flex; flex-direction: column; }
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.setting-row:last-child { border-bottom: none; }
+.setting-meta { min-width: 0; flex: 1; }
+.setting-label { font-size: 0.9rem; font-weight: 600; display: block; }
+.setting-help { margin: 3px 0 0; font-size: 0.76rem; line-height: 1.35; }
+
+.setting-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+.setting-control select,
+.setting-control input[type='text'] {
+  min-width: 150px;
+}
+.slider-control { display: flex; align-items: center; gap: 8px; }
+.slider-control input[type='range'] { width: 130px; }
+.slider-value {
+  min-width: 62px;
+  text-align: right;
+  font-weight: 700;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+button.tiny, .ghost.tiny {
+  padding: 2px 8px;
+  font-size: 0.68rem;
+}
+
+/* --- Learn subnav (Coached / Explore) ---------------------------------------- */
+.learn-subnav {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.learn-subnav button {
+  padding: 8px 18px;
+  font-weight: 700;
+  font-size: 0.86rem;
+}
+.learn-subnav button.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+/* --- Explore reference library ----------------------------------------------- */
+.explore-list { max-height: 80vh; display: flex; flex-direction: column; }
+.explore-search {
+  width: 100%;
+  margin: 8px 0 6px;
+}
+.explore-count { margin: 0 0 8px; font-size: 0.74rem; }
+.explore-total { opacity: 0.7; }
+.explore-items { overflow-y: auto; flex: 1; }
+.explore-items button {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  text-align: left;
+  font-size: 0.82rem;
+  padding: 6px 8px;
+  width: 100%;
+}
+.explore-eco {
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+  min-width: 30px;
+}
+.explore-name { flex: 1; min-width: 0; }
+.explore-attrib { font-size: 0.74rem; margin-top: 4px; }
+
+/* --- Puzzle trainer ---------------------------------------------------------- */
+.puzzle-detail { grid-template-columns: minmax(0, 1fr) minmax(0, 360px); }
+.puzzle-actions { display: flex; gap: 8px; }
+.puzzle-hint {
+  padding: 10px;
+  background: var(--faint);
+  border-radius: 8px;
+  margin: 0;
+}
+.puzzle-progress { margin: 0; font-size: 0.78rem; }
+
+/* --- Analysis sandbox -------------------------------------------------------- */
+.load-input {
+  width: 100%;
+  resize: vertical;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  margin-bottom: 8px;
+}
+.legal-moves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.legal-move {
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: var(--faint);
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+.move.linkish {
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: var(--foreground);
+  border-radius: 4px;
+}
+.move.linkish:hover { background: var(--accent); color: var(--primary); }
+.move.linkish.cur { background: var(--primary); color: var(--primary-foreground); }
+
+
+
+/* --- Quantum variant --------------------------------------------------------- */
+.q-help { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 0.86rem; line-height: 1.4; }
+.q-log { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem; }
+.q-log li { padding: 6px 8px; background: var(--faint); border-radius: 6px; }

@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-12T00:00:00Z",
+  "puzzles": [
+    {
+      "id": "backrank-1",
+      "fen": "6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1",
+      "sideToMove": "w",
+      "motif": "Back-rank mate",
+      "difficulty": "beginner",
+      "solution": ["Ra8#"],
+      "hint": "The black king is trapped behind its own pawns. One rook move ends it."
+    },
+    {
+      "id": "backrank-2",
+      "fen": "3r2k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1",
+      "sideToMove": "w",
+      "motif": "Back-rank / rook trade",
+      "difficulty": "beginner",
+      "solution": ["Rxd8#"],
+      "hint": "Trade on the back rank — but check whether it's mate because of the trapped king."
+    },
+    {
+      "id": "fork-knight-1",
+      "fen": "r3k2r/ppp2ppp/8/3q4/8/8/PPP2PPP/R3K2R w KQkq - 0 1",
+      "sideToMove": "w",
+      "motif": "Royal fork setup",
+      "difficulty": "intermediate",
+      "solution": ["Rd1"],
+      "hint": "Attack the exposed black queen on the open file to win a tempo."
+    },
+    {
+      "id": "mate-in-1-queen",
+      "fen": "6k1/5ppp/8/8/8/8/8/3Q2K1 w - - 0 1",
+      "sideToMove": "w",
+      "motif": "Back-rank queen mate",
+      "difficulty": "beginner",
+      "solution": ["Qd8#"],
+      "hint": "The king is boxed in by its own f7/g7/h7 pawns. Deliver mate on the back rank."
+    },
+    {
+      "id": "smothered-mate",
+      "fen": "6rk/6pp/8/6N1/8/8/8/6K1 w - - 0 1",
+      "sideToMove": "w",
+      "motif": "Smothered mate",
+      "difficulty": "intermediate",
+      "solution": ["Nf7#"],
+      "hint": "The king is smothered by its own rook and pawns. A knight delivers the final blow."
+    },
+    {
+      "id": "pin-win-queen",
+      "fen": "4k3/8/8/8/8/4b3/4R3/4K3 w - - 0 1",
+      "sideToMove": "w",
+      "motif": "Pin",
+      "difficulty": "beginner",
+      "solution": ["Rxe3+"],
+      "hint": "The bishop is pinned to the king. Take it."
+    },
+    {
+      "id": "ladder-mate",
+      "fen": "7k/R7/8/8/8/8/8/1R5K w - - 0 1",
+      "sideToMove": "w",
+      "motif": "Two-rook ladder mate",
+      "difficulty": "beginner",
+      "solution": ["Rb8#"],
+      "hint": "The a7-rook seals the 7th rank. Swing the other rook to the 8th to mate."
+    },
+    {
+      "id": "queen-mate-support",
+      "fen": "7k/5Q2/6K1/8/8/8/8/8 w - - 0 1",
+      "sideToMove": "w",
+      "motif": "Queen mate with king support",
+      "difficulty": "beginner",
+      "solution": ["Qf8#"],
+      "hint": "Your king on g6 guards g7 and h7. Bring the queen to the back rank."
+    }
+  ]
+}

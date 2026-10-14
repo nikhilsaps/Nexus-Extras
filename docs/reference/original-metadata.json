@@ -1,0 +1,46 @@
+{
+  "host": "Nexus LocalServe",
+  "tagline": "Served off a microSD card, over your LAN.",
+  "version": 1,
+  "updated": "2026-10-13",
+  "sites": [
+    {
+      "name": "WiFi Sniffer",
+      "path": "/sniff/index.html",
+      "desc": "Live probe/client logger. Needs Sniffer mode running.",
+      "icon": "\ud83d\udce1",
+      "tags": [
+        "live",
+        "wifi"
+      ]
+    },
+    {
+      "name": "About Nexus",
+      "path": "/about.html",
+      "desc": "What this little web host is and how it works.",
+      "icon": "\u2139\ufe0f",
+      "tags": [
+        "info"
+      ]
+    },
+    {
+      "name": "Notes",
+      "path": "/notes/index.html",
+      "desc": "A sample sub-site in its own folder.",
+      "icon": "\ud83d\udcdd",
+      "tags": [
+        "demo",
+        "folder"
+      ]
+    },
+    {
+      "name": "Nexus on GitHub",
+      "path": "https://github.com/nikhilsaps/Nexus",
+      "desc": "Firmware source (needs internet; opens off-device).",
+      "icon": "\ud83d\udc19",
+      "tags": [
+        "external"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nexus Site</title>
+<style>
+  :root{color-scheme:dark}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background:#0b1020;color:#e7ecf5;padding:28px 18px}
+  header{max-width:760px;margin:0 auto 22px}
+  h1{font-size:26px;margin:0 0 4px}
+  .tag{color:#9fb0d4;font-size:14px;margin:0}
+  .meta{color:#5f6f98;font-size:12px;margin-top:8px}
+  .grid{max-width:760px;margin:0 auto;display:grid;gap:14px;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+  a.tile{display:block;text-decoration:none;color:inherit;background:#141b33;
+    border:1px solid #243055;border-radius:14px;padding:18px;transition:.15s}
+  a.tile:hover{border-color:#5b8cff;transform:translateY(-2px)}
+  a.tile:focus-visible{outline:3px solid #9fb0d4;outline-offset:4px}
+  @media(prefers-reduced-motion:reduce){a.tile{transition:none}a.tile:hover{transform:none}}
+  .ico{font-size:28px}
+  .nm{font-size:17px;font-weight:600;margin:8px 0 4px}
+  .ds{font-size:13px;color:#9fb0d4;line-height:1.4}
+  .tags{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+  .tags span{font-size:11px;color:#8fa0c8;background:#0e1428;border:1px solid #2c3a63;
+    border-radius:999px;padding:2px 8px}
+  .err{max-width:760px;margin:0 auto;background:#2a1620;border:1px solid #5a2a3a;
+    border-radius:12px;padding:16px;color:#f3c7d2;font-size:14px}
+  footer{max-width:760px;margin:26px auto 0;color:#5f6f98;font-size:12px;text-align:center}
+</style>
+</head>
+<body>
+  <header>
+    <h1 id="host">Nexus Site</h1>
+    <p class="tag" id="tagline">Loading sites...</p>
+    <p class="meta" id="meta"></p>
+  </header>
+  <div class="grid" id="grid"></div>
+  <footer>Browser-powered games and tools. Hosted anywhere, including your Cardputer.</footer>
+  <script>
+    const esc = s => String(s).replace(/[&<>"]/g, c =>
+      ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    fetch('metadata.json', {cache:'no-store'})
+      .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+      .then(m => {
+        document.title = m.host || 'LocalServe';
+        document.getElementById('host').textContent = m.host || 'LocalServe';
+        document.getElementById('tagline').textContent = m.tagline || '';
+        document.getElementById('meta').textContent =
+          'v' + (m.version ?? '?') + (m.updated ? ' - updated ' + m.updated : '');
+        const grid = document.getElementById('grid');
+        (m.sites || []).forEach(s => {
+          const a = document.createElement('a');
+          a.className = 'tile';
+          const target = new URL(s.path || './', location.href);
+          if (!['http:', 'https:'].includes(target.protocol)) return;
+          a.href = target.href;
+          if ((s.path||'').startsWith('http')) { a.target = '_blank'; a.rel = 'noopener'; }
+          const tags = (s.tags||[]).map(t => '<span>'+esc(t)+'</span>').join('');
+          a.innerHTML =
+            '<div class="ico">' + esc(s.icon || 'APP') + '</div>' +
+            '<div class="nm">' + esc(s.name || 'Untitled') + '</div>' +
+            '<div class="ds">' + esc(s.desc || '') + '</div>' +
+            '<div class="tags">' + tags + '</div>';
+          grid.appendChild(a);
+        });
+      })
+      .catch(e => {
+        document.getElementById('tagline').textContent = '';
+        document.getElementById('grid').outerHTML =
+          '<div class="err">Could not load <code>metadata.json</code> (' + esc(e.message) +
+          '). Make sure it sits next to this file in your web root (or <code>/sites</code> on the SD card).</div>';
+      });
+  </script>
+</body>
+</html>

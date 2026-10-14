@@ -1,0 +1,10 @@
+{
+  "sites": [
+    {
+      "id": "chess-master",
+      "source": "chess-master",
+      "output": "chess-master/dist",
+      "mount": "chess"
+    }
+  ]
+}

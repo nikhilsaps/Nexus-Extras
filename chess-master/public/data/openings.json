@@ -1,0 +1,253 @@
+{
+  "schemaVersion": 2,
+  "updatedAt": "2026-10-12T00:00:00Z",
+  "openings": [
+    {
+      "id": "italian-game",
+      "name": "Italian Game",
+      "eco": "C50-C54",
+      "family": "e4 e5 — Open Game",
+      "color": "white",
+      "idea": "One of the oldest openings. White develops the bishop to c4, eyeing the f7 square — Black's weakest point in the opening.",
+      "plans": [
+        "Build a strong center with c3 and d4.",
+        "Castle kingside early and bring the rook to e1.",
+        "Target f7 with the bishop and a knight jump to g5 in some lines."
+      ],
+      "counter": "Black equalizes with the solid Giuoco Pianissimo (…Bc5, …Nf6, …d6) or counterattacks with the Two Knights (…Nf6). Keeping e5 defended and completing development neutralizes White's pressure.",
+      "line": [
+        { "san": "e4", "by": "you", "note": "Grab the center and open lines for the bishop and queen." },
+        { "san": "e5", "by": "opp" },
+        { "san": "Nf3", "by": "you", "note": "Develop with a threat — you hit the e5 pawn." },
+        { "san": "Nc6", "by": "opp" },
+        { "san": "Bc4", "by": "you", "note": "The Italian bishop. It aims straight at f7, Black's soft spot." },
+        { "san": "Bc5", "by": "opp" },
+        { "san": "c3", "by": "you", "note": "Prepare d4 to build a big pawn center." },
+        { "san": "Nf6", "by": "opp" },
+        { "san": "d4", "by": "you", "note": "Strike in the center now that it's supported." }
+      ],
+      "branches": {
+        "5": ["Nf6"]
+      }
+    },
+    {
+      "id": "ruy-lopez",
+      "name": "Ruy López (Spanish)",
+      "eco": "C60-C99",
+      "family": "e4 e5 — Open Game",
+      "color": "white",
+      "idea": "White pins the knight that defends e5 and pressures Black's structure. A deeply strategic opening favored for over a century.",
+      "plans": [
+        "Pressure c6/e5 and prepare c3 and d4 for a big center.",
+        "Reroute the b1-knight via d2-f1-g3.",
+        "Play for a long positional squeeze."
+      ],
+      "counter": "The Berlin Defense (…Nf6) steers into a solid endgame. The Morphy Defense (…a6) questions the bishop; after Ba4 Black gets a flexible setup.",
+      "line": [
+        { "san": "e4", "by": "you", "note": "Claim the center." },
+        { "san": "e5", "by": "opp" },
+        { "san": "Nf3", "by": "you", "note": "Attack e5 and develop." },
+        { "san": "Nc6", "by": "opp" },
+        { "san": "Bb5", "by": "you", "note": "The Spanish bishop pins the defender of e5 and pressures c6." },
+        { "san": "a6", "by": "opp" },
+        { "san": "Ba4", "by": "you", "note": "Keep the pin alive rather than trading on c6." },
+        { "san": "Nf6", "by": "opp" },
+        { "san": "O-O", "by": "you", "note": "King safety first; the e4 pawn is indirectly defended." }
+      ]
+    },
+    {
+      "id": "queens-gambit",
+      "name": "Queen's Gambit",
+      "eco": "D06-D69",
+      "family": "d4 d5 — Closed Game",
+      "color": "white",
+      "idea": "White offers the c4 pawn to deflect Black's d5 pawn and dominate the center. Not a true gambit — White usually regains the pawn.",
+      "plans": [
+        "If Black takes (…dxc4), play e3 and Bxc4 to regain the pawn.",
+        "If Black declines (…e6), build with Nc3, Nf3, pressure d5.",
+        "Use central space for a queenside minority attack."
+      ],
+      "counter": "The Queen's Gambit Declined (…e6) is rock-solid. The Slav (…c6) supports d5 while keeping the bishop free. Both are world-championship mainstays.",
+      "line": [
+        { "san": "d4", "by": "you", "note": "Take central space with the queen's pawn." },
+        { "san": "d5", "by": "opp" },
+        { "san": "c4", "by": "you", "note": "Offer the gambit — challenge d5 and open lines." },
+        { "san": "e6", "by": "opp" },
+        { "san": "Nc3", "by": "you", "note": "Pile up on d5." },
+        { "san": "Nf6", "by": "opp" },
+        { "san": "Bg5", "by": "you", "note": "Pin the f6-knight to add pressure on d5." },
+        { "san": "Be7", "by": "opp" },
+        { "san": "e3", "by": "you", "note": "Open the bishop and keep a solid, flexible center." }
+      ]
+    },
+    {
+      "id": "slav-defense",
+      "name": "Slav Defense",
+      "eco": "D10-D19",
+      "family": "d4 d5 — Closed Game",
+      "color": "black",
+      "idea": "Black supports d5 with the c-pawn instead of the e-pawn, keeping the light-squared bishop free to develop outside the pawn chain.",
+      "plans": [
+        "Develop the c8-bishop to f5 or g4 before …e6.",
+        "Hold the center and aim for …dxc4 with …b5 to keep the pawn.",
+        "Castle and seek a sound, flexible structure."
+      ],
+      "counter": "White presses with Nf3 and Nc3 and can try an early e4 push. Central space and quick development keep White's initiative alive.",
+      "line": [
+        { "san": "d4", "by": "opp" },
+        { "san": "d5", "by": "you", "note": "Meet the center head-on." },
+        { "san": "c4", "by": "opp" },
+        { "san": "c6", "by": "you", "note": "The Slav move — support d5 but keep your light bishop free." },
+        { "san": "Nf3", "by": "opp" },
+        { "san": "Nf6", "by": "you", "note": "Develop and reinforce d5." },
+        { "san": "Nc3", "by": "opp" },
+        { "san": "dxc4", "by": "you", "note": "Grab the pawn; you can try to hold it with …b5 later." }
+      ]
+    },
+    {
+      "id": "sicilian-najdorf",
+      "name": "Sicilian Defense — Najdorf",
+      "eco": "B90-B99",
+      "family": "e4 c5 — Sicilian",
+      "color": "black",
+      "idea": "The most famous Sicilian. …a6 prepares …e5 or …b5 and denies White the b5 square. Black fights for the initiative, not just equality.",
+      "plans": [
+        "Expand on the queenside with …b5.",
+        "Develop flexibly: …e5 or …e6.",
+        "Counterattack rather than defend."
+      ],
+      "counter": "White tries the English Attack (Be3, f3, Qd2, O-O-O, g4) or sharp 6.Bg5 / 6.Bc4, racing to attack the king first.",
+      "line": [
+        { "san": "e4", "by": "opp" },
+        { "san": "c5", "by": "you", "note": "The Sicilian — fight for the center asymmetrically." },
+        { "san": "Nf3", "by": "opp" },
+        { "san": "d6", "by": "you", "note": "Support a future …e5 and open the c8-bishop's diagonal." },
+        { "san": "d4", "by": "opp" },
+        { "san": "cxd4", "by": "you", "note": "Trade off White's d-pawn to get the half-open c-file." },
+        { "san": "Nxd4", "by": "opp" },
+        { "san": "Nf6", "by": "you", "note": "Develop and hit e4." },
+        { "san": "Nc3", "by": "opp" },
+        { "san": "a6", "by": "you", "note": "The Najdorf move — control b5 and prepare …e5 or …b5." }
+      ]
+    },
+    {
+      "id": "french-defense",
+      "name": "French Defense",
+      "eco": "C00-C19",
+      "family": "e4 e6 — Semi-Open",
+      "color": "black",
+      "idea": "Black challenges the center with …d5. Solid and strategically rich, though the c8-bishop can be hard to develop.",
+      "plans": [
+        "Undermine White's center with …c5 and …f6.",
+        "Find activity for the light-squared bishop.",
+        "Play on the queenside where Black often has space."
+      ],
+      "counter": "White gains space with the Advance (3.e5) or trades in the Exchange (3.exd5). The Tarrasch (3.Nd2) keeps a flexible, slightly freer game.",
+      "line": [
+        { "san": "e4", "by": "opp" },
+        { "san": "e6", "by": "you", "note": "Prepare …d5 without committing the c8-bishop yet." },
+        { "san": "d4", "by": "opp" },
+        { "san": "d5", "by": "you", "note": "Strike the center directly." },
+        { "san": "e5", "by": "opp" },
+        { "san": "c5", "by": "you", "note": "Immediately attack the base of White's pawn chain." },
+        { "san": "c3", "by": "opp" },
+        { "san": "Nc6", "by": "you", "note": "Pile up on d4, the chain's base." }
+      ]
+    },
+    {
+      "id": "caro-kann",
+      "name": "Caro-Kann Defense",
+      "eco": "B10-B19",
+      "family": "e4 c6 — Semi-Open",
+      "color": "black",
+      "idea": "Like the French, Black hits the center with …d5, but prepares it with …c6 so the light-squared bishop can develop freely first.",
+      "plans": [
+        "Develop the c8-bishop actively before …e6 locks it in.",
+        "Keep a sound structure and aim for a good endgame.",
+        "Trade into safe, solid positions."
+      ],
+      "counter": "White tries the Advance (3.e5 Bf5) for space, or the Classical for quick development, pressing Black's slightly passive setup.",
+      "line": [
+        { "san": "e4", "by": "opp" },
+        { "san": "c6", "by": "you", "note": "Prepare …d5 while keeping the light bishop's path open." },
+        { "san": "d4", "by": "opp" },
+        { "san": "d5", "by": "you", "note": "Challenge the center on your terms." },
+        { "san": "Nc3", "by": "opp" },
+        { "san": "dxe4", "by": "you", "note": "Open the position and remove White's central pawn." },
+        { "san": "Nxe4", "by": "opp" },
+        { "san": "Bf5", "by": "you", "note": "Develop the bishop actively — the whole point of the Caro-Kann." }
+      ]
+    },
+    {
+      "id": "london-system",
+      "name": "London System",
+      "eco": "D02",
+      "family": "d4 — System",
+      "color": "white",
+      "idea": "A reliable system: White sets up the same solid structure (d4, Bf4, e3, Nf3, Bd3, c3) against almost anything. Easy to learn, hard to crack.",
+      "plans": [
+        "Build the London pyramid: c3-d4-e3, bishop on f4, knight on f3.",
+        "Castle kingside and expand carefully.",
+        "Rely on structure over theory."
+      ],
+      "counter": "Black contests the f4-bishop (…c5 and …Qb6 hitting b2 and d4) or frees the game with an early …Bf5 / …c5.",
+      "line": [
+        { "san": "d4", "by": "you", "note": "Start the London with the queen's pawn." },
+        { "san": "d5", "by": "opp" },
+        { "san": "Bf4", "by": "you", "note": "The London bishop — develop it outside the pawn chain before e3." },
+        { "san": "Nf6", "by": "opp" },
+        { "san": "e3", "by": "you", "note": "Solidify the center and open the f1-bishop." },
+        { "san": "e6", "by": "opp" },
+        { "san": "Nf3", "by": "you", "note": "Complete the setup; next comes Bd3 and c3." },
+        { "san": "Bd6", "by": "opp" },
+        { "san": "Bg3", "by": "you", "note": "Keep your good bishop by stepping back from the trade." }
+      ]
+    },
+    {
+      "id": "scandinavian",
+      "name": "Scandinavian Defense",
+      "eco": "B01",
+      "family": "e4 d5 — Semi-Open",
+      "color": "black",
+      "idea": "Black challenges e4 at once. After the queen recaptures and retreats, Black gets a solid, straightforward structure with little heavy theory.",
+      "plans": [
+        "Develop quickly: …Nf6, …c6, …Bf5 or …Bg4.",
+        "Castle and aim for a sound middlegame.",
+        "Avoid early queen harassment."
+      ],
+      "counter": "White develops with tempo against the exposed queen (Nc3, d4, Nf3, Bc4) and enjoys a lead in development and central space.",
+      "line": [
+        { "san": "e4", "by": "opp" },
+        { "san": "d5", "by": "you", "note": "Challenge e4 immediately." },
+        { "san": "exd5", "by": "opp" },
+        { "san": "Qxd5", "by": "you", "note": "Recapture — yes the queen is out early, but she'll find a safe home." },
+        { "san": "Nc3", "by": "opp" },
+        { "san": "Qa5", "by": "you", "note": "Retreat to a5, out of the way but still active." },
+        { "san": "d4", "by": "opp" },
+        { "san": "Nf6", "by": "you", "note": "Develop and prepare to castle." }
+      ]
+    },
+    {
+      "id": "nimzo-indian",
+      "name": "Nimzo-Indian Defense",
+      "eco": "E20-E59",
+      "family": "d4 Nf6 — Indian",
+      "color": "black",
+      "idea": "Black pins the c3-knight to fight for e4, often trading the bishop for the knight to damage White's structure in return for central control.",
+      "plans": [
+        "Double White's c-pawns with …Bxc3 when it brings lasting gains.",
+        "Blockade the light squares and control e4.",
+        "Trade the dark-squared bishop for structural concessions."
+      ],
+      "counter": "White picks the Rubinstein (3.e3), Classical (4.Qc2 to avoid doubled pawns), or Sämisch (accept doubled pawns for the bishop pair). Bishop pair and center vs structure.",
+      "line": [
+        { "san": "d4", "by": "opp" },
+        { "san": "Nf6", "by": "you", "note": "Flexible development, controlling e4." },
+        { "san": "c4", "by": "opp" },
+        { "san": "e6", "by": "you", "note": "Open the f8-bishop's path." },
+        { "san": "Nc3", "by": "opp" },
+        { "san": "Bb4", "by": "you", "note": "The Nimzo pin — fight for e4 and threaten to damage White's pawns." }
+      ]
+    }
+  ]
+}

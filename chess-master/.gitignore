@@ -1,0 +1,15 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+
+# FastAPI dev mock data (local test data, not part of the site)
+server/data/*.json
+server/data/*.bak
+__pycache__/
+.venv/
+
+# Lichess opening TSV build inputs (regenerate with build-openings-ref.mjs).
+# The generated public/data/openings-ref.json is committed instead.
+scripts/eco/

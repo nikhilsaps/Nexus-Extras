@@ -1,0 +1,72 @@
+/* Shared house theme for Cardputer sites. LIGHT ONLY (SITESUI rule 9).
+ *
+ * Oat defines every color token with light-dark(). Forcing color-scheme:light
+ * makes all of them resolve to their light value, so there is no dark mode.
+ * Loaded AFTER oat.min.css so these overrides win. */
+
+:root {
+  color-scheme: light; /* never follow the OS dark preference */
+
+  /* House accent: calm blue. Oat's default primary is a muted brown; we swap it
+     for a blue so the whole launcher + sites share one identity. */
+  --primary: #3b82c4;
+  --primary-foreground: #ffffff;
+  --ring: #3b82c4;
+  --accent: #eaf2fb;
+
+  /* Slightly cooler neutrals + a hair more contrast than Oat's defaults. */
+  --background: #f7f8fa;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --secondary: #eef1f5;
+  --secondary-foreground: #334155;
+  --muted: #eef1f5;
+  --muted-foreground: #64748b;
+  --faint: #f1f4f8;
+  --faint-foreground: #94a3b8;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --success: #15803d;
+  --warning: #b45309;
+  --danger: #dc2626;
+
+  /* Chess-specific accents reused across the UI. */
+  --board-light: #eef2f7;
+  --board-dark: #7d94b4;
+  --hint: #3b82c4;
+
+  /* Move-classification colors (teacher mode). */
+  --cls-best: #15803d;
+  --cls-good: #4d7c0f;
+  --cls-inaccuracy: #b45309;
+  --cls-mistake: #c2410c;
+  --cls-blunder: #dc2626;
+}
+
+/* App-level density + layout helpers that complement Oat's utilities. */
+html,
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  overflow-x: hidden; /* guard: no horizontal spill off the body */
+}
+
+#root {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Long content (PGN text, logs, SAN lists) must wrap, not push the layout wide. */
+.card,
+.q-log li,
+.coach-pv,
+.candidate-pv {
+  overflow-wrap: anywhere;
+}
+
+/* Tighten Oat's default card padding a touch for a denser feel. */
+.card {
+  padding: 14px 16px;
+}

@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-12T00:00:00Z",
+  "traps": [
+    {
+      "id": "scholars-mate",
+      "name": "Scholar's Mate",
+      "side": "white",
+      "difficulty": "beginner",
+      "idea": "The classic four-move checkmate. White aims the queen and bishop at the f7 pawn, which only the king defends.",
+      "line": [
+        { "san": "e4", "by": "you", "note": "Open lines for the queen and bishop." },
+        { "san": "e5", "by": "foe" },
+        { "san": "Bc4", "by": "you", "note": "Point the bishop at f7." },
+        { "san": "Nc6", "by": "foe" },
+        { "san": "Qh5", "by": "you", "note": "Bring the queen out to attack f7 and e5." },
+        { "san": "Nf6", "by": "foe" },
+        { "san": "Qxf7#", "by": "you", "note": "Checkmate! The queen is defended by the bishop and the king can't escape." }
+      ],
+      "win": "Qxf7 is mate: the queen attacks the king, is protected by the c4-bishop, and the king has no flight square.",
+      "refutation": "Black should play 3...g6 (hitting the queen) or 3...Qe7 defending f7. After 3.Qh5 g6 4.Qf3 the threat is still Qxf7#, so Black must continue carefully with ...Nf6. Against accurate defense White has simply misplaced the queen."
+    },
+    {
+      "id": "legals-mate",
+      "name": "Légal's Mate",
+      "side": "white",
+      "difficulty": "intermediate",
+      "idea": "A famous queen sacrifice: White gives up the queen to deliver checkmate with three minor pieces.",
+      "line": [
+        { "san": "e4", "by": "you" },
+        { "san": "e5", "by": "foe" },
+        { "san": "Nf3", "by": "you", "note": "Develop and attack e5." },
+        { "san": "d6", "by": "foe" },
+        { "san": "Bc4", "by": "you" },
+        { "san": "Bg4", "by": "foe", "note": "The pin that looks annoying but invites the trap." },
+        { "san": "Nc3", "by": "you" },
+        { "san": "g6", "by": "foe" },
+        { "san": "Nxe5", "by": "you", "note": "The queen sacrifice! If Black takes the queen, mate follows." },
+        { "san": "Bxd1", "by": "foe", "note": "Black grabs the queen — the losing move." },
+        { "san": "Bxf7+", "by": "you" },
+        { "san": "Ke7", "by": "foe" },
+        { "san": "Nd5#", "by": "you", "note": "Checkmate with three minor pieces — Légal's Mate." }
+      ],
+      "win": "After the queen sac, Bxf7+ Ke7 Nd5# is a clean mate delivered by knight, bishop, and knight.",
+      "refutation": "Instead of 9...Bxd1, Black should play 9...dxe5, keeping the extra piece and simply winning. The trap only works if Black greedily takes the queen."
+    },
+    {
+      "id": "fried-liver",
+      "name": "Fried Liver Attack",
+      "side": "white",
+      "difficulty": "intermediate",
+      "idea": "A sharp knight sacrifice on f7 that drags Black's king into the open for a strong attack.",
+      "line": [
+        { "san": "e4", "by": "you" },
+        { "san": "e5", "by": "foe" },
+        { "san": "Nf3", "by": "you" },
+        { "san": "Nc6", "by": "foe" },
+        { "san": "Bc4", "by": "you" },
+        { "san": "Nf6", "by": "foe", "note": "The Two Knights — inviting sharp play." },
+        { "san": "Ng5", "by": "you", "note": "Attack f7 immediately." },
+        { "san": "d5", "by": "foe" },
+        { "san": "exd5", "by": "you" },
+        { "san": "Nxd5", "by": "foe", "note": "The risky recapture that allows the Fried Liver." },
+        { "san": "Nxf7", "by": "you", "note": "The knight sacrifice — the king must take." },
+        { "san": "Kxf7", "by": "foe" },
+        { "san": "Qf3+", "by": "you", "note": "Check and hit the pinned d5-knight; White has a raging attack." }
+      ],
+      "win": "After Qf3+ the king is exposed on f7, the d5-knight is pinned and attacked, and White regains material with a dominating attack.",
+      "refutation": "Black can avoid it with 8...Na5 (hitting the bishop) instead of 8...Nxd5, or play the solid 6...d5 lines. Many engines consider ...Nxd5 playable with precise defense, but it is extremely dangerous for a human."
+    },
+    {
+      "id": "blackburne-shilling",
+      "name": "Blackburne Shilling Gambit",
+      "side": "black",
+      "difficulty": "intermediate",
+      "idea": "Black sets a trap: if White greedily grabs the e5 pawn with the knight, Black wins material with a queen raid.",
+      "line": [
+        { "san": "e4", "by": "foe" },
+        { "san": "e5", "by": "you" },
+        { "san": "Nf3", "by": "foe" },
+        { "san": "Nc6", "by": "you" },
+        { "san": "Bc4", "by": "foe" },
+        { "san": "Nd4", "by": "you", "note": "The provocative move — offering e5." },
+        { "san": "Nxe5", "by": "foe", "note": "White takes the bait." },
+        { "san": "Qg5", "by": "you", "note": "Double attack: the e5-knight and the g2-pawn." },
+        { "san": "Nxf7", "by": "foe", "note": "A desperado, but it loses." },
+        { "san": "Qxg2", "by": "you" },
+        { "san": "Rf1", "by": "foe" },
+        { "san": "Qxe4+", "by": "you", "note": "Black wins material and emerges on top." }
+      ],
+      "win": "After ...Qxe4+ Black has won a pawn and shattered White's position; the greedy Nxe5 was punished.",
+      "refutation": "White should decline with 4...Nd4 5.Nxd4! exd4 6.O-O, or simply 5.O-O, keeping a pleasant game. Only 5.Nxe5 walks into the trap."
+    },
+    {
+      "id": "englund-gambit-trap",
+      "name": "Englund Gambit Trap",
+      "side": "black",
+      "difficulty": "intermediate",
+      "idea": "A tricky queenside trap in the Englund Gambit that snares the b2 pawn and the a1 rook if White is careless.",
+      "line": [
+        { "san": "d4", "by": "foe" },
+        { "san": "e5", "by": "you", "note": "The Englund Gambit — offering a pawn for quick activity." },
+        { "san": "dxe5", "by": "foe" },
+        { "san": "Nc6", "by": "you" },
+        { "san": "Nf3", "by": "foe" },
+        { "san": "Qe7", "by": "you", "note": "Eyeing the e5 pawn and preparing tricks." },
+        { "san": "Bf4", "by": "foe" },
+        { "san": "Qb4+", "by": "you", "note": "The key check — forking b2 and the bishop." },
+        { "san": "Bd2", "by": "foe", "note": "The careless block that loses." },
+        { "san": "Qxb2", "by": "you" },
+        { "san": "Bc3", "by": "foe" },
+        { "san": "Bb4", "by": "you", "note": "Pinning the bishop; Black wins material." }
+      ],
+      "win": "After ...Bb4 the c3-bishop is pinned to the rook; Black regains the gambit pawn with interest.",
+      "refutation": "White sidesteps with 5.Bf4 then meeting 5...Qb4+ with 6.Bd2 Qxb2 7.Bc3! only if prepared, or better 4.Nf3 and simple development. Accurate play keeps the extra pawn."
+    },
+    {
+      "id": "fishing-pole",
+      "name": "Fishing Pole Trap",
+      "side": "black",
+      "difficulty": "intermediate",
+      "idea": "In the Ruy López, Black dangles a knight on g4 to lure White's h-pawn forward and open the h-file for a mating attack.",
+      "line": [
+        { "san": "e4", "by": "foe" },
+        { "san": "e5", "by": "you" },
+        { "san": "Nf3", "by": "foe" },
+        { "san": "Nc6", "by": "you" },
+        { "san": "Bb5", "by": "foe" },
+        { "san": "Nf6", "by": "you" },
+        { "san": "O-O", "by": "foe" },
+        { "san": "Ng4", "by": "you", "note": "The fishing pole — the knight is bait." },
+        { "san": "h3", "by": "foe", "note": "Grabbing the bait opens the h-file." },
+        { "san": "h5", "by": "you", "note": "Offering the knight to blast open the h-file." },
+        { "san": "hxg4", "by": "foe", "note": "Taking the knight — now the h-file is a highway." },
+        { "san": "hxg4", "by": "you", "note": "The rook on h8 bears down the open file toward White's king." }
+      ],
+      "win": "With the h-file open and White's knight on f3 pinned by ...g4 ideas, Black crashes through with ...Qh4 and ...Rh1 mating ideas against the castled king.",
+      "refutation": "White should simply NOT take the knight: 9.Re1 or 9.d4 ignores the bait, after which ...Ng4 is just a misplaced knight. The trap depends on the reflexive h3 and hxg4."
+    },
+    {
+      "id": "elephant-trap",
+      "name": "Elephant Trap",
+      "side": "black",
+      "difficulty": "intermediate",
+      "idea": "In the Queen's Gambit Declined, Black lures White into winning a 'free' pawn that actually drops a piece.",
+      "line": [
+        { "san": "d4", "by": "foe" },
+        { "san": "d5", "by": "you" },
+        { "san": "c4", "by": "foe" },
+        { "san": "e6", "by": "you" },
+        { "san": "Nc3", "by": "foe" },
+        { "san": "Nf6", "by": "you" },
+        { "san": "Bg5", "by": "foe" },
+        { "san": "Nbd7", "by": "you", "note": "The bait — the d5 pawn looks hanging." },
+        { "san": "cxd5", "by": "foe" },
+        { "san": "exd5", "by": "you" },
+        { "san": "Nxd5", "by": "foe", "note": "Grabbing the 'free' pawn — the losing move." },
+        { "san": "Nxd5", "by": "you" },
+        { "san": "Bxd8", "by": "foe" },
+        { "san": "Bb4+", "by": "you", "note": "The point — check wins back the queen with an extra piece." }
+      ],
+      "win": "After ...Bb4+ White must block, and ...Kxd8 regains the queen leaving Black a whole piece up.",
+      "refutation": "White should not play 9.Nxd5. Simply developing with 9.Bd3 or playing the normal QGD keeps equality. The trap only springs on the greedy knight capture."
+    },
+    {
+      "id": "lasker-trap",
+      "name": "Lasker Trap (Albin Counter-Gambit)",
+      "side": "black",
+      "difficulty": "advanced",
+      "idea": "One of the earliest known under-promotion traps: Black promotes to a knight to win material and avoid White's threats.",
+      "line": [
+        { "san": "d4", "by": "foe" },
+        { "san": "d5", "by": "you" },
+        { "san": "c4", "by": "foe" },
+        { "san": "e5", "by": "you", "note": "The Albin Counter-Gambit." },
+        { "san": "dxe5", "by": "foe" },
+        { "san": "d4", "by": "you", "note": "The advanced passed pawn is Black's trump." },
+        { "san": "e3", "by": "foe", "note": "The careless move that allows the trap." },
+        { "san": "Bb4+", "by": "you" },
+        { "san": "Bd2", "by": "foe" },
+        { "san": "dxe3", "by": "you", "note": "Opening lines toward White's king." },
+        { "san": "Bxb4", "by": "foe" },
+        { "san": "exf2+", "by": "you" },
+        { "san": "Ke2", "by": "foe" },
+        { "san": "fxg1=N+", "by": "you", "note": "Under-promotion to a knight with check — the famous Lasker Trap!" }
+      ],
+      "win": "The knight under-promotion comes with check; after ...fxg1=N+ and ...Qxb4 Black wins material thanks to the fork and the exposed white king.",
+      "refutation": "White must avoid 6.e3. The main line 6.a3 or 6.g3 neutralizes the d4 pawn safely. The whole trap hinges on 6.e3."
+    }
+  ]
+}
