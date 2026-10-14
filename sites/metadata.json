@@ -13,6 +13,14 @@
       "tags": ["game", "learning"]
     },
     {
+      "name": "Asura Reader",
+      "kind": "app",
+      "path": "/asura-test/",
+      "desc": "Read manhwa and manga captured from AsuraScans. A static offline snapshot baked at build time; rebuild to refresh.",
+      "icon": "📖",
+      "tags": ["manga", "reader", "snapshot"]
+    },
+    {
       "name": "About Nexus",
       "kind": "app",
       "path": "/about.html",

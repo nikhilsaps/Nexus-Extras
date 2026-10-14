@@ -7,6 +7,12 @@
       "source": "sites/chess-master",
       "output": "sites/chess-master/dist",
       "mount": "chess"
+    },
+    {
+      "id": "asura-test",
+      "source": "sites/asura-test-src",
+      "output": "sites/asura-test-src/dist",
+      "mount": "asura-test"
     }
   ]
 }
