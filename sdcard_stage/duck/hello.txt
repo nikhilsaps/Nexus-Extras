@@ -1,0 +1,4 @@
+REM Nexus sample - types a line of text wherever the cursor is.
+REM Open Notepad or any text field, run this, watch it type.
+DEFAULT_DELAY 40
+STRINGLN Hello from Nexus. This payload was typed by a Cardputer.

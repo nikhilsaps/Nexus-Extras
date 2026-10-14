@@ -1,146 +1,126 @@
-<div align="center">
+# Nexus Sites
 
-# Nexus Site
+A small collection of browser-powered games and tools, served straight off a microSD card
+by a [Nexus](https://github.com/nikhilsaps/Nexus) Cardputer (ESP32-S3) over your LAN. No
+cloud and no PC are required on the device — and because every site is plain static files,
+the exact same folder also runs in any ordinary browser or static web host.
 
-### Small host. Browser-powered possibilities.
+![Nexus launcher](docs/screenshots/launcher/desktop.png)
 
-A growing collection of games, learning experiences and useful tools.
-Built for ordinary web hosting, with a small enough server footprint for Nexus LocalServe on an ESP32 Cardputer.
+The home page is a light, minimal launcher that reads `sites/metadata.json` and lists
+whatever is hosted. Add a site, add one entry, and it appears here automatically.
 
-[Explore the collection](#the-collection) · [Run locally](#quick-start) · [Deploy](#hosting--deployment) · [Add a site](docs/ADDING-A-SITE.md)
+---
 
-</div>
+## Sites
 
-![Nexus Site launcher](docs/screenshots/launcher/desktop.png)
+Sites are listed in the order they appear in the launcher. Each one is a self-contained
+folder or file under `sdcard_stage/sites/` and keeps its own look. New sites get their own
+section and screenshot below.
 
-## The idea
+### 1. Chess Master — `/chess/`
 
-The host delivers files. Your browser does the work.
+Play Stockfish, explore openings and practice tactics. The engine runs entirely in your
+browser; nothing is sent anywhere.
 
-Chess logic, Stockfish analysis, rendering and local persistence run on the visitor's computer or phone, not on the ESP32. No Node or Python service is required to play the built Chess site. The same deployment folder can be served by a laptop, a home server, an HTTPS static host or a Cardputer with Nexus firmware.
+![Chess Master — play](docs/screenshots/chess-master/play.png)
+![Chess Master — learn](docs/screenshots/chess-master/learn.png)
 
-This repository contains **websites**, not firmware. Nexus firmware is a separate project.
+### 2. WiFi Sniffer — `/sniff/index.html`
 
-## The collection
+A live probe and client logger. It streams data captured by the device, so it only shows
+anything while **Sniffer mode** is running on the Cardputer (no static screenshot).
 
-| Site | Category | What it does | Deployment path | Guide |
-| --- | --- | --- | --- | --- |
-| **Chess Master** | Game / learning | Browser-side Stockfish, coached play, opening exploration and tactics | `chess/` | [Site README](chess-master/README.md) |
+### 3. Notes — `/notes/index.html`
 
-### Chess Master
+A sample sub-site that lives in its own folder — a template for your own pages.
 
-Play against adjustable-strength Stockfish, study openings, practice puzzles and review positions. Settings and records are stored in the browser using IndexedDB. The existing interface also includes an analysis sandbox and experimental Quantum/Chess960 modes; these are not claims of complete rules validation.
+![Notes](docs/screenshots/notes/page.png)
 
-![Chess Master play screen](docs/screenshots/chess-master/play.png)
+### 4. About Nexus — `/about.html`
 
-<details>
-<summary>More screenshots</summary>
+What this little web host is and how the firmware serves files.
 
-![Chess Master learning screen](docs/screenshots/chess-master/learn.png)
+![About Nexus](docs/screenshots/about/page.png)
 
-</details>
+### 5. Nexus on GitHub — external
 
-Screenshots are real browser captures of the locally hosted build, not mockups. Each new site gets its own directory under `docs/screenshots/` and its own README. See the [site template](docs/SITE-TEMPLATE.md).
+A tile linking to the firmware source. It opens off-device and needs internet.
 
-## Quick start
-
-Prerequisites: Node.js 20.19+ (22 LTS recommended), npm and Python 3.10+ for assembly/preview. These are **build-machine tools**, not Cardputer requirements.
-
-From the repository root:
-
-```sh
-npm --prefix chess-master ci
-npm --prefix chess-master run build
-python scripts/assemble.py
-python -m http.server 8080 --bind 127.0.0.1 --directory dist/sites
-```
-
-Open `http://localhost:8080/`, then choose Chess Master. Use HTTP hosting rather than double-clicking HTML files: fetch, Web Workers and WASM need a proper origin.
-
-For frontend development only:
-
-```sh
-npm --prefix chess-master run dev
-```
-
-The assembler replaces only generated `dist/sites/` and retains dated previous builds under `dist/sites.previous.*` for rollback. Clean up old generated backups when you no longer need them. Build each app first; `sites.json` maps its output folder to its deployed URL.
+---
 
 ## Repository layout
 
-```text
-nexus-site/
-  index.html                  Shared launcher, original Nexus design
-  metadata.json               Launcher titles, descriptions and relative links
-  sites.json                  Source/build-output/deployment mappings
-  chess-master/               First app: source, public assets and its own README
-    src/
-    public/                   Stockfish WASM, data, vendor assets, service worker
-    server/                   Optional local FastAPI file-sync mock
-    scripts/                  Existing dataset and queue checks
-    dist/                     Generated app build, ignored by Git
-  docs/
-    screenshots/
-      launcher/               Shared launcher screenshots
-      chess-master/           This app's screenshots
-    reference/                Original launcher metadata, retained for reference
-    ADDING-A-SITE.md
-    SITE-TEMPLATE.md
-    VALIDATION.md
-  scripts/assemble.py         Builds a clean deployment tree from app outputs
-  dist/sites/                 Generated deployable collection, ignored by Git
+```
+nexus-sites/
+  sdcard_stage/            # copy the CONTENTS of this to the microSD root
+    sites/                 # the web root the firmware serves (/sdcard/sites)
+      index.html           # the launcher (the home page shown above)
+      metadata.json        # the list of sites the launcher renders
+      about.html
+      notes/index.html
+      sniff/index.html
+      chess/               # Chess Master build output (from chess-master/)
+    captive/               # captive-portal pages (see Additions)
+    duck/                  # BadUSB / HID payloads (see Additions)
+  chess-master/            # Chess Master SOURCE (built into sites/chess)
+  scripts/assemble.py      # builds the apps in sites.json into the web root
+  sites.json               # which app sources get built, and where
+  docs/                    # screenshots and guides
 ```
 
-Source folders stay readable and independent. **Deploy `dist/sites/`, not the repository.** Do not copy `node_modules`, development servers, screenshots or source code onto the SD card.
+## Deploy to the Cardputer
 
-## Hosting & deployment
+Copy the **contents** of `sdcard_stage/` to the root of the microSD card, so the card has
+`/sites`, `/captive` and `/duck` at its top level. The firmware serves `/sites` at
+`http://<device-ip>/`.
 
-| Host | What to publish | Notes |
-| --- | --- | --- |
-| Laptop / home server | Contents of `dist/sites/` | Any static HTTP server with JS, JSON and WASM MIME types |
-| HTTPS static hosting | Contents of `dist/sites/` | Suitable for GitHub Pages or similar; deployment automation is not included yet |
-| Nexus Cardputer | Contents of `dist/sites/` into SD `/sites/` | Start LocalServe Wireless or Wired; use the URL shown on the device |
+## Run anywhere (no ESP32)
 
-For a Cardputer, the card should look like:
+The sites are just static files, so any static server works:
 
-```text
-/sites/index.html
-/sites/metadata.json
-/sites/chess/index.html
-/sites/chess/assets/...
-/sites/chess/engine/...
-/sites/chess/data/...
-/sites/chess/vendor/...
-/sites/chess/sw.js
+```sh
+cd sdcard_stage/sites
+python -m http.server 8000
+# open http://localhost:8000/
 ```
 
-Use `/chess/` with its trailing slash (or `/chess/index.html`). Links and assets are relative, so the collection can also live below a hosted subdirectory, such as a repository-based static site.
+## Building the apps
 
-### Browser storage, offline use and optional sync
+Static sites (About, Notes, Sniffer) need no build — they are authored directly in
+`sdcard_stage/sites/`. Apps that have a build step are listed in `sites.json` and compiled
+into the web root by:
 
-- **Core play:** static hosting is sufficient. Stockfish is a single-threaded WASM worker, so no cross-origin-isolation headers are needed. Performance depends on the visitor's device.
-- **Local data:** IndexedDB belongs to the browser/origin. A different hostname, port, browser profile or private session may show separate data. Export important records before changing hosts.
-- **Offline reloads:** service-worker caching requires HTTPS or localhost and a successful initial load. Ordinary Cardputer LAN HTTP is not a secure context, so do not assume offline reload support there. Keep the host available.
-- **Optional server sync:** Chess requests relative `api/data/<name>` endpoints. At `/chess/`, that means `/chess/api/data/<name>`. Ordinary static hosts do not implement these endpoints. Local play/persistence is still available; sync can show offline.
-- **Nexus compatibility:** current firmware exposes `/api/save/...`, not Chess's `api/data/...` contract. Server-side Chess sync needs an adapter before it can be claimed to work. The optional FastAPI mock serves the Chess app at its own root for development; it is not a production authenticated backend.
-- **Shared hosting:** Chess's service worker removes only its own `chess-master-*` caches, not caches belonging to future tools.
+```sh
+# build the app first (example: Chess Master)
+cd chess-master && npm install && npm run build && cd ..
+# then copy builds into sdcard_stage/sites/<mount>
+python scripts/assemble.py
+```
 
-## Add another site
+`assemble.py` swaps each build in atomically and keeps the previous copy under
+`.build-backups/` (ignored by git), so a failed run never leaves a half-written site. It
+also checks that every launcher link resolves inside the web root.
 
-1. Create a source directory with a self-contained README and relative assets.
-2. Build its static output, then register the output and mount in `sites.json`.
-3. Add its launcher entry to `metadata.json`.
-4. Add real screenshots in `docs/screenshots/<site-id>/`.
-5. Add one catalog row and a short preview section here; keep deeper details in the site's README.
-6. Assemble, preview and verify it at both root and subdirectory URLs.
+## Adding a new site
 
-Follow [the detailed checklist](docs/ADDING-A-SITE.md). The root README is the collection index; app READMEs hold app-specific features and setup.
+1. Drop a static site into `sdcard_stage/sites/<name>/` (or build an app and register it in
+   `sites.json`).
+2. Add an entry to `sdcard_stage/sites/metadata.json` (`name`, `path`, `desc`, `icon`,
+   `tags`). Link folders with an explicit file, e.g. `/<name>/index.html` — the firmware
+   does not auto-index folders.
+3. Add a screenshot under `docs/screenshots/<name>/` and a section to this README.
 
-## Validation
+See [`docs/ADDING-A-SITE.md`](docs/ADDING-A-SITE.md) and
+[`docs/SITE-TEMPLATE.md`](docs/SITE-TEMPLATE.md) for details.
 
-See [validation notes](docs/VALIDATION.md) for what was actually built and checked. Browser smoke tests are not a full chess-engine, security or hardware audit. SD deployment and live Cardputer serving have not been performed in this setup step.
+## Additions: captive portal and BadUSB payloads
 
-## Credits & licensing
+Two folders ride along on the SD card for other Cardputer modes. They are **not** part of
+the web launcher: the firmware confines HTTP to `/sites`, so these are reached only by
+their own modes, not from the home page.
 
-Chess Master uses React, Vite, chess.js, react-chessboard, gifenc, Stockfish.js and vendored Oat assets. Opening-reference inputs are from the Lichess opening dataset; consult the app's generation script for provenance.
+- **`captive/`** — HTML pages for the captive-portal mode.
+- **`duck/`** — HID / BadUSB keystroke payload scripts.
 
-Stockfish's bundled JavaScript identifies **GPLv3** licensing. No blanket license is assigned to this repository by this setup. Before public redistribution, review the bundled dependencies and datasets, preserve their notices and fulfill applicable source-distribution obligations. Do not assume that all assets share one license.
+Use these only on hardware and networks you own or are authorised to test.

@@ -1,0 +1,8 @@
+REM Nexus sample - Windows: open Run, launch Notepad, type into it.
+DEFAULT_DELAY 60
+GUI r
+DELAY 500
+STRINGLN notepad
+DELAY 1200
+STRINGLN Nexus was here.
+STRINGLN Ducky Script running off the SD card.

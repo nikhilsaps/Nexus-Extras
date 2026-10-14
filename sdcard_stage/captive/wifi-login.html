@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guest WiFi - Sign in</title>
+<style>
+  :root{color-scheme:light dark}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background:#0b1020;color:#e7ecf5;display:flex;min-height:100vh;
+    align-items:center;justify-content:center;padding:20px}
+  .card{width:100%;max-width:360px;background:#141b33;border:1px solid #243055;
+    border-radius:16px;padding:28px 24px;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+  h1{font-size:20px;margin:0 0 4px}
+  p.sub{margin:0 0 22px;color:#9fb0d4;font-size:13px}
+  label{display:block;font-size:12px;color:#9fb0d4;margin:14px 0 6px}
+  input{width:100%;padding:11px 12px;border-radius:10px;border:1px solid #2c3a63;
+    background:#0e1428;color:#e7ecf5;font-size:14px}
+  input:focus{outline:none;border-color:#5b8cff}
+  button{width:100%;margin-top:22px;padding:12px;border:0;border-radius:10px;
+    background:#5b8cff;color:#07122e;font-weight:600;font-size:15px;cursor:pointer}
+  button:hover{background:#78a0ff}
+  .foot{margin-top:16px;text-align:center;font-size:11px;color:#6a7aa3}
+</style>
+</head>
+<body>
+  <form class="card" onsubmit="event.preventDefault();done()">
+    <h1>Guest WiFi</h1>
+    <p class="sub">Sign in to continue to the internet.</p>
+    <label for="u">Email</label>
+    <input id="u" type="email" placeholder="you@example.com" required>
+    <label for="p">Access code</label>
+    <input id="p" type="password" placeholder="Room / voucher code" required>
+    <button type="submit">Connect</button>
+    <div class="foot">Served from a Nexus Cardputer SD card.</div>
+  </form>
+  <script>
+    function done(){
+      document.querySelector('.card').innerHTML =
+        '<h1>Connected</h1><p class="sub">You are online. Enjoy your stay.</p>';
+    }
+  </script>
+</body>
+</html>

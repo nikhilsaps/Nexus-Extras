@@ -1,0 +1,43 @@
+{
+  "host": "Nexus",
+  "tagline": "Browser-powered games and tools, served off a microSD card over your LAN.",
+  "version": 2,
+  "updated": "2026-10-15",
+  "sites": [
+    {
+      "name": "Chess Master",
+      "path": "/chess/",
+      "desc": "Play Stockfish, explore openings and practice tactics. The engine runs entirely in your browser.",
+      "icon": "♞",
+      "tags": ["game", "learning"]
+    },
+    {
+      "name": "WiFi Sniffer",
+      "path": "/sniff/index.html",
+      "desc": "Live probe and client logger. Needs Sniffer mode running on the device.",
+      "icon": "📡",
+      "tags": ["live", "wifi"]
+    },
+    {
+      "name": "Notes",
+      "path": "/notes/index.html",
+      "desc": "A sample sub-site living in its own folder.",
+      "icon": "📝",
+      "tags": ["demo", "folder"]
+    },
+    {
+      "name": "About Nexus",
+      "path": "/about.html",
+      "desc": "What this little web host is and how it works.",
+      "icon": "ℹ️",
+      "tags": ["info"]
+    },
+    {
+      "name": "Nexus on GitHub",
+      "path": "https://github.com/nikhilsaps/Nexus",
+      "desc": "Firmware source. Needs internet and opens off-device.",
+      "icon": "🐙",
+      "tags": ["external", "source"]
+    }
+  ]
+}

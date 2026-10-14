@@ -1,0 +1,5 @@
+REM Nexus sample - open the default browser to a URL (Windows Run box).
+DEFAULT_DELAY 60
+GUI r
+DELAY 600
+STRINGLN https://github.com/nikhilsaps/Nexus

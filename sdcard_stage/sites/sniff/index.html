@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nexus WiFi Sniffer</title>
+<style>
+  :root{
+    --bg:#0b0e14; --panel:#121722; --line:#232a38; --text:#e8ecf3;
+    --dim:#8a97ad; --accent:#5ad1ff; --probe:#ffd166; --ap:#9b8cff; --client:#4ade80;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font:15px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  header{position:sticky;top:0;z-index:5;background:linear-gradient(#0b0e14,#0b0e14e6);
+    border-bottom:1px solid var(--line);padding:14px 20px;display:flex;
+    align-items:center;gap:22px;flex-wrap:wrap;backdrop-filter:blur(6px)}
+  h1{font-size:17px;margin:0;letter-spacing:.5px}
+  h1 .dot{color:var(--accent)}
+  .stat{display:flex;flex-direction:column;line-height:1.1}
+  .stat b{font-size:22px}
+  .stat span{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.6px}
+  .spacer{flex:1}
+  .live{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--dim)}
+  .pulse{width:9px;height:9px;border-radius:50%;background:var(--client);
+    box-shadow:0 0 0 0 #4ade8080;animation:p 1.4s infinite}
+  .pulse.off{background:#555;animation:none}
+  @keyframes p{0%{box-shadow:0 0 0 0 #4ade8066}70%{box-shadow:0 0 0 7px #4ade8000}100%{box-shadow:0 0 0 0 #4ade8000}}
+  main{padding:16px 20px 60px}
+  table{width:100%;border-collapse:collapse}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  th{position:sticky;top:62px;background:var(--panel);color:var(--dim);font-size:11px;
+    text-transform:uppercase;letter-spacing:.6px;cursor:pointer;user-select:none}
+  th:hover{color:var(--text)}
+  td.mac{color:var(--dim)}
+  td.ssid{color:var(--text);max-width:40vw}
+  td.ssid.empty{color:#4a5468;font-style:italic}
+  .tag{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;
+    text-transform:uppercase;letter-spacing:.5px}
+  .tag.probe{background:#ffd16622;color:var(--probe)}
+  .tag.ap{background:#9b8cff22;color:var(--ap)}
+  .tag.client{background:#4ade8022;color:var(--client)}
+  .bar{display:inline-block;height:7px;border-radius:4px;vertical-align:middle;
+    background:linear-gradient(90deg,#e5484d,#ffd166,#4ade80)}
+  .age{color:var(--dim)}
+  .empty-row td{text-align:center;color:var(--dim);padding:40px;font-style:italic}
+  footer{position:fixed;bottom:0;left:0;right:0;background:#0b0e14ee;
+    border-top:1px solid var(--line);padding:7px 20px;font-size:11px;color:var(--dim);
+    display:flex;gap:16px;align-items:center}
+  button{background:var(--panel);color:var(--text);border:1px solid var(--line);
+    border-radius:7px;padding:5px 11px;font:inherit;font-size:12px;cursor:pointer}
+  button:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Nexus <span class="dot">&#9679;</span> WiFi Sniffer</h1>
+  <div class="stat"><b id="s-dev">0</b><span>devices</span></div>
+  <div class="stat"><b id="s-ch">-</b><span>channel</span></div>
+  <div class="stat"><b id="s-fr">0</b><span>frames</span></div>
+  <div class="spacer"></div>
+  <div class="live"><span class="pulse" id="pulse"></span><span id="live-txt">live</span></div>
+</header>
+<main>
+  <table>
+    <thead><tr>
+      <th data-k="type">Type</th>
+      <th data-k="ssid">SSID / probed name</th>
+      <th data-k="mac">Device MAC</th>
+      <th data-k="rssi">Signal</th>
+      <th data-k="ch">Ch</th>
+      <th data-k="count">Hits</th>
+      <th data-k="age">Seen</th>
+    </tr></thead>
+    <tbody id="rows"><tr class="empty-row"><td colspan="7">waiting for the first frame...</td></tr></tbody>
+  </table>
+</main>
+<footer>
+  <button id="toggle">pause</button>
+  <button id="dl-csv">download CSV</button>
+  <button id="dl">download JSON</button>
+  <span>sort: click a column header</span>
+  <span class="spacer" style="flex:1"></span>
+  <span id="err"></span>
+</footer>
+<script>
+const EP = "/api/sniff.json";
+let sortKey = "rssi", sortDir = -1, running = true, last = {list:[]};
+
+const rssiPct = r => Math.max(0, Math.min(100, (r + 100) * 1.4));
+const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+function render(d){
+  s_dev.textContent = d.devices ?? 0;
+  s_ch.textContent  = d.ch ?? "-";
+  s_fr.textContent  = (d.frames ?? 0).toLocaleString();
+  const list = (d.list || []).slice().sort((a,b)=>{
+    let x=a[sortKey], y=b[sortKey];
+    if(typeof x==="string"){x=x.toLowerCase();y=(y||"").toLowerCase();}
+    return x<y?-sortDir:x>y?sortDir:0;
+  });
+  if(!list.length){ rows.innerHTML='<tr class="empty-row"><td colspan="7">no devices yet - walk around, wake some phones</td></tr>'; return; }
+  rows.innerHTML = list.map(e=>`<tr>
+    <td><span class="tag ${e.type}">${e.type}</span></td>
+    <td class="ssid ${e.ssid?'':'empty'}">${e.ssid?esc(e.ssid):'(none)'}</td>
+    <td class="mac">${e.mac}</td>
+    <td><span class="bar" style="width:${rssiPct(e.rssi)*0.6}px"></span> ${e.rssi}</td>
+    <td>${e.ch}</td>
+    <td>${e.count}</td>
+    <td class="age">${e.age}s</td>
+  </tr>`).join("");
+}
+
+async function poll(){
+  if(running){
+    try{
+      const r = await fetch(EP, {cache:"no-store"});
+      last = await r.json();
+      render(last);
+      err.textContent = "";
+      pulse.classList.remove("off");
+    }catch(e){
+      err.textContent = "no device - is the USB cable in and NCM up?";
+      pulse.classList.add("off");
+    }
+  }
+  setTimeout(poll, 1000);
+}
+
+document.querySelectorAll("th").forEach(th=>th.onclick=()=>{
+  const k=th.dataset.k;
+  if(sortKey===k) sortDir*=-1; else {sortKey=k; sortDir=(k==="rssi"||k==="count")?-1:1;}
+  render(last);
+});
+toggle.onclick=()=>{ running=!running; toggle.textContent=running?"pause":"resume";
+  live_txt.textContent=running?"live":"paused"; pulse.classList.toggle("off",!running); };
+function save(name,text,mime){
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([text],{type:mime}));
+  a.download=name; a.click();
+}
+dl.onclick=()=>save("nexus-sniff-"+Date.now()+".json",
+  JSON.stringify(last,null,2),"application/json");
+document.getElementById("dl-csv").onclick=()=>{
+  const q=s=>'"'+String(s).replace(/"/g,'""')+'"';
+  const rows=[["type","ssid","mac","rssi","channel","hits","age_s"]];
+  (last.list||[]).forEach(e=>rows.push([e.type,e.ssid,e.mac,e.rssi,e.ch,e.count,e.age]));
+  save("nexus-sniff-"+Date.now()+".csv",
+    rows.map(r=>r.map(q).join(",")).join("\n"),"text/csv");
+};
+const s_dev=document.getElementById("s-dev"), s_ch=document.getElementById("s-ch"),
+      s_fr=document.getElementById("s-fr"), rows=document.getElementById("rows"),
+      err=document.getElementById("err"), pulse=document.getElementById("pulse"),
+      live_txt=document.getElementById("live-txt");
+poll();
+</script>
+</body>
+</html>

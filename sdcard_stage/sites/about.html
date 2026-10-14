@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>About Nexus LocalServe</title>
+<style>
+  body{margin:0;min-height:100vh;font-family:system-ui,sans-serif;background:#0b1020;
+    color:#e7ecf5;padding:32px 20px;line-height:1.6}
+  main{max-width:620px;margin:0 auto}
+  h1{font-size:24px} h2{font-size:17px;color:#9fb0d4;margin-top:28px}
+  code{background:#141b33;padding:2px 6px;border-radius:6px}
+  a{color:#5b8cff}
+  .back{display:inline-block;margin-bottom:20px;color:#9fb0d4;text-decoration:none}
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="/">&larr; Back to launcher</a>
+  <h1>About Nexus LocalServe</h1>
+  <p>You are reading a page served straight off a microSD card by a
+     <strong>Nexus</strong> Cardputer (ESP32-S3). No cloud, no PC: the little
+     terminal joined your WiFi and started a web server.</p>
+  <h2>How it works</h2>
+  <p>Files live in <code>/sites</code> on the SD card. The firmware serves them
+     by file extension, streams big files in chunks, and prefers a pre-compressed
+     <code>.gz</code> twin when one exists. The launcher reads
+     <code>metadata.json</code> to list what is hosted.</p>
+  <h2>Add your own</h2>
+  <p>Drop any static site into <code>/sites</code> and add an entry to
+     <code>metadata.json</code>. Sub-folders work too, as long as you link to an
+     explicit file like <code>/notes/index.html</code> (the server does not
+     auto-index folders).</p>
+  <p><a href="https://github.com/nikhilsaps/Nexus">Firmware source on GitHub</a></p>
+</main>
+</body>
+</html>

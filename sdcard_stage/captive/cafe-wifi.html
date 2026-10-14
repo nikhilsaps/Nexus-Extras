@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cafe WiFi</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background:linear-gradient(160deg,#1b2a1f,#0e1a12);color:#eafff0;
+    display:flex;align-items:center;justify-content:center;padding:20px}
+  .card{width:100%;max-width:380px;background:#13231a;border:1px solid #27432f;
+    border-radius:18px;padding:30px 26px;text-align:center}
+  .logo{font-size:34px;margin-bottom:6px}
+  h1{font-size:21px;margin:0 0 6px}
+  p{color:#9fcdae;font-size:14px;margin:6px 0}
+  .terms{font-size:12px;color:#78a888;margin:18px 0;text-align:left;
+    background:#0e1a12;border-radius:10px;padding:12px;max-height:120px;overflow:auto}
+  label{display:flex;gap:8px;align-items:center;font-size:13px;color:#cfeedd;margin:12px 0;text-align:left}
+  button{width:100%;margin-top:12px;padding:13px;border:0;border-radius:12px;
+    background:#39c877;color:#07160d;font-weight:700;font-size:15px;cursor:pointer}
+  button:disabled{background:#2a4a37;color:#6a8a76;cursor:not-allowed}
+</style>
+</head>
+<body>
+  <form class="card" onsubmit="event.preventDefault();done()">
+    <div class="logo">&#9749;</div>
+    <h1>The Corner Cafe WiFi</h1>
+    <p>Free internet for our guests.</p>
+    <div class="terms">
+      By connecting you agree to use this network responsibly and lawfully.
+      Bandwidth may be limited during busy hours. No warranty is provided.
+      Served from a Nexus Cardputer.
+    </div>
+    <label><input type="checkbox" id="ok" onchange="document.getElementById('go').disabled=!this.checked"> I accept the terms of use</label>
+    <button id="go" type="submit" disabled>Get online</button>
+  </form>
+  <script>
+    function done(){
+      document.querySelector('.card').innerHTML =
+        '<div class="logo">&#9989;</div><h1>You are connected</h1><p>Enjoy your coffee.</p>';
+    }
+  </script>
+</body>
+</html>

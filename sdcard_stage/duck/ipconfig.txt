@@ -1,0 +1,8 @@
+REM Nexus sample - open a command prompt and show the network config.
+DEFAULT_DELAY 60
+GUI r
+DELAY 600
+STRINGLN cmd
+DELAY 1200
+STRINGLN ipconfig /all
+STRINGLN echo Nexus was here

@@ -1,4 +1,5 @@
 {
+  "web_root": "sdcard_stage/sites",
   "sites": [
     {
       "id": "chess-master",

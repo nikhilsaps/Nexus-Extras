@@ -1,0 +1,5 @@
+REM Nexus sample - pop the Windows version dialog (harmless demo).
+DEFAULT_DELAY 60
+GUI r
+DELAY 500
+STRINGLN winver

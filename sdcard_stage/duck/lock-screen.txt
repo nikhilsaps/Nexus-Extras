@@ -1,0 +1,3 @@
+REM Nexus sample - lock the Windows workstation (harmless demo of a hotkey).
+DELAY 300
+GUI l

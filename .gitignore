@@ -4,6 +4,7 @@ __pycache__/
 *.pyc
 /dist/
 **/dist/
+.build-backups/
 *.log
 .env
 .env.*
