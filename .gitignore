@@ -5,6 +5,7 @@ __pycache__/
 /dist/
 **/dist/
 .build-backups/
+/sites/chess/
 *.log
 .env
 .env.*

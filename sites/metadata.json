@@ -1,7 +1,7 @@
 {
   "host": "Nexus",
   "tagline": "Browser-powered games and tools, served off a microSD card over your LAN.",
-  "version": 2,
+  "version": 3,
   "updated": "2026-10-15",
   "sites": [
     {
@@ -17,13 +17,6 @@
       "desc": "Live probe and client logger. Needs Sniffer mode running on the device.",
       "icon": "📡",
       "tags": ["live", "wifi"]
-    },
-    {
-      "name": "Notes",
-      "path": "/notes/index.html",
-      "desc": "A sample sub-site living in its own folder.",
-      "icon": "📝",
-      "tags": ["demo", "folder"]
     },
     {
       "name": "About Nexus",
