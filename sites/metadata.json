@@ -39,8 +39,7 @@
     {
       "name": "Evil-Twin Pages",
       "kind": "tool",
-      "path": "/captive/",
-      "desc": "Captive-portal page set for the evil-twin tool. Pages live here and are picked and served from the device.",
+      "desc": "Captive-portal page set in /sites/captive. Pages are picked and served from the device during an Evil-Twin run, not browsed from here.",
       "icon": "🎣",
       "tags": ["wifi", "on-device"]
     }

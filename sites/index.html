@@ -58,14 +58,14 @@
     width:100%;display:grid;gap:clamp(14px,1.5vw,20px);
     grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));
   }
-  a.tile{
+  .tile{
     position:relative;display:flex;flex-direction:column;overflow:hidden;
     text-decoration:none;color:inherit;background:var(--card);
     border:1px solid var(--line);border-radius:24px;
     padding:24px;box-shadow:var(--shadow);
     transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
   }
-  a.tile::before{
+  .tile::before{
     content:"";position:absolute;inset:0 0 auto 0;height:3px;
     background:linear-gradient(90deg,var(--accent),var(--accent-2));
     opacity:0;transition:opacity .2s ease;
@@ -73,6 +73,7 @@
   a.tile:hover{transform:translateY(-5px);box-shadow:var(--shadow-hi);border-color:#dfe1ea}
   a.tile:hover::before{opacity:1}
   a.tile:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  .tile-static{cursor:default}
   .ico{
     width:56px;height:56px;border-radius:18px;flex:none;
     display:flex;align-items:center;justify-content:center;font-size:27px;
@@ -81,6 +82,7 @@
     box-shadow:0 2px 8px rgba(15,20,32,.04);
   }
   .ext{position:absolute;top:22px;right:24px;color:var(--faint);font-size:15px;line-height:1}
+  .badge{position:absolute;top:20px;right:20px;font-size:11px;color:var(--muted);background:var(--pill);border-radius:999px;padding:3px 10px;letter-spacing:.02em}
   .nm{font-size:19px;font-weight:700;margin:0 0 6px;letter-spacing:-.015em}
   .ds{font-size:14px;color:var(--muted);line-height:1.55;margin:0;flex:1}
   .tags{margin-top:18px;display:flex;gap:7px;flex-wrap:wrap}
@@ -91,7 +93,7 @@
   }
   .err code{background:#fde8ec;border-radius:6px;padding:1px 6px}
   footer{width:100%;margin-top:clamp(28px,4vw,48px);color:var(--faint);font-size:13px}
-  @media(prefers-reduced-motion:reduce){a.tile{transition:none}a.tile:hover{transform:none}}
+  @media(prefers-reduced-motion:reduce){.tile{transition:none}a.tile:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -116,21 +118,30 @@
     const esc = s => String(s).replace(/[&<>"]/g, c =>
       ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     const tile = s => {
-      const target = new URL(s.path || './', location.href);
-      if (!['http:', 'https:'].includes(target.protocol)) return null;
-      const a = document.createElement('a');
-      a.className = 'tile';
-      a.href = target.href;
-      const external = (s.path || '').startsWith('http');
-      if (external) { a.target = '_blank'; a.rel = 'noopener'; }
+      let el, external = false, linked = false;
+      if (s.path) {
+        const target = new URL(s.path, location.href);
+        if (!['http:', 'https:'].includes(target.protocol)) return null;
+        el = document.createElement('a');
+        el.className = 'tile';
+        el.href = target.href;
+        external = String(s.path).startsWith('http');
+        if (external) { el.target = '_blank'; el.rel = 'noopener'; }
+        linked = true;
+      } else {
+        el = document.createElement('div');
+        el.className = 'tile tile-static';
+      }
       const tags = (s.tags || []).map(t => '<span>' + esc(t) + '</span>').join('');
-      a.innerHTML =
-        (external ? '<div class="ext" title="Opens in a new tab">\u2197</div>' : '') +
+      const corner = external
+        ? '<div class="ext" title="Opens in a new tab">\u2197</div>'
+        : (!linked ? '<div class="badge">on device</div>' : '');
+      el.innerHTML = corner +
         '<div class="ico">' + esc(s.icon || 'APP') + '</div>' +
         '<div class="nm">' + esc(s.name || 'Untitled') + '</div>' +
         '<div class="ds">' + esc(s.desc || '') + '</div>' +
         (tags ? '<div class="tags">' + tags + '</div>' : '');
-      return a;
+      return el;
     };
     const label = (n, one, many) => n + ' ' + (n === 1 ? one : many);
     fetch('metadata.json', {cache:'no-store'})
@@ -148,9 +159,9 @@
         };
         (m.sites || []).forEach(s => {
           const g = groups[s.kind] || groups.app;
-          const a = tile(s);
-          if (!a) return;
-          g.grid.appendChild(a);
+          const el = tile(s);
+          if (!el) return;
+          g.grid.appendChild(el);
           g.n++;
         });
         Object.values(groups).forEach(g => {

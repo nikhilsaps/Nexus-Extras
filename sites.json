@@ -1,5 +1,6 @@
 {
   "web_root": "sites",
+  "sd_root": ["sites", "duck"],
   "sites": [
     {
       "id": "chess-master",

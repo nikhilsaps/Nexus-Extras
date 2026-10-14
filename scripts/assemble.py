@@ -1,6 +1,6 @@
 """Build app sources into the SD web root (sites/) without touching sources.
 
-Static sites (about, notes, sniff) are authored directly in the web root and need no
+Static sites (about, sniff, captive) are authored directly in the web root and need no
 assembly. Only built apps listed in sites.json are compiled here: their build output is
 copied into <web_root>/<mount>. The swap is atomic and the previous copy is kept outside
 the web root under .build-backups/ so a failed run never leaves a half-written site.
@@ -47,6 +47,8 @@ def main():
     built = {m: True for m in mounts}
     for site in meta.get("sites", []):
         path = site.get("path", "")
+        if not path:
+            continue  # a tool with no browsable page (served on-device)
         if path.startswith(("http://", "https://")):
             continue
         rel = path.lstrip("/")
@@ -84,7 +86,7 @@ def main():
             print(f"  previous copy kept: {prev}")
 
     print(f"Web root ready: {WEB_ROOT}")
-    print("Deploy: copy sites/, captive/ and duck/ to the microSD root.")
+    print("Deploy to the SD card with: python scripts/deploy.py --dest <DRIVE>")
 
 
 if __name__ == "__main__":
