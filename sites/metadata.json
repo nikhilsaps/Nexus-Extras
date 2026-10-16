@@ -10,15 +10,10 @@
       "path": "/chess/",
       "desc": "Play Stockfish, explore openings and practice tactics. The engine runs entirely in your browser.",
       "icon": "♞",
-      "tags": ["game", "learning"]
-    },
-    {
-      "name": "Asura Reader",
-      "kind": "app",
-      "path": "/asura-test/",
-      "desc": "Read manhwa and manga captured from AsuraScans. A static offline snapshot baked at build time; rebuild to refresh.",
-      "icon": "📖",
-      "tags": ["manga", "reader", "snapshot"]
+      "tags": [
+        "game",
+        "learning"
+      ]
     },
     {
       "name": "About Nexus",
@@ -26,7 +21,9 @@
       "path": "/about.html",
       "desc": "What this little web host is and how it works.",
       "icon": "ℹ️",
-      "tags": ["info"]
+      "tags": [
+        "info"
+      ]
     },
     {
       "name": "Nexus on GitHub",
@@ -34,7 +31,10 @@
       "path": "https://github.com/nikhilsaps/Nexus",
       "desc": "Firmware source. Needs internet and opens off-device.",
       "icon": "🐙",
-      "tags": ["external", "source"]
+      "tags": [
+        "external",
+        "source"
+      ]
     },
     {
       "name": "WiFi Sniffer",
@@ -42,14 +42,20 @@
       "path": "/sniff/index.html",
       "desc": "Live probe and client logger. Needs Sniffer mode running on the device.",
       "icon": "📡",
-      "tags": ["live", "wifi"]
+      "tags": [
+        "live",
+        "wifi"
+      ]
     },
     {
       "name": "Evil-Twin Pages",
       "kind": "tool",
       "desc": "Captive-portal page set in /sites/captive. Pages are picked and served from the device during an Evil-Twin run, not browsed from here.",
       "icon": "🎣",
-      "tags": ["wifi", "on-device"]
+      "tags": [
+        "wifi",
+        "on-device"
+      ]
     }
   ]
 }
