@@ -17,6 +17,25 @@ keystroke payloads, which are plain text and never served over the web).
 
 ---
 
+## Using it with Nexus
+
+This repo is the **content side** of the [Nexus](https://github.com/nikhilsaps/Nexus)
+Cardputer firmware. The firmware is the code that runs on the device; this repo is
+everything that firmware reads off the microSD card. The two line up like this:
+
+| Nexus firmware mode | Reads from this repo |
+|---------------------|----------------------|
+| **LocalServe** (web host over Wi-Fi / USB-NCM) | the whole `sites/` web root, served at `http://<device-ip>/` |
+| **Evil-Twin** (captive portal) | the pages in `sites/captive/` |
+| **Wi-Fi Sniffer** (viewer) | `sites/sniff/index.html` |
+| **Ducky / BadUSB** | the `.txt` payloads in `duck/` |
+
+Flow: clone this repo, build any apps that have a build step, then run
+`python scripts/deploy.py --dest <DRIVE>` to mirror `sites/` and `duck/` onto the SD
+card. Flash the Nexus firmware, insert the card, and the device serves and runs exactly
+what is in here. Because every site is plain static files, you can also open `sites/`
+in any browser with no Cardputer at all (see **Run anywhere** below).
+
 ## Sites
 
 Sites are listed in the order they appear in the launcher. Each one lives under `sites/`
