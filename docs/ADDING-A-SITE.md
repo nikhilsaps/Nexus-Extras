@@ -30,7 +30,11 @@ application runtime. Everything a site needs lives under `sites/`.
    cache on a shared origin. Scope workers to the app path and use HTTPS/localhost for
    caching.
 9. Document optional backend APIs accurately. Do not assume Nexus firmware supplies them.
-   Keep core static behaviour usable when optional sync is unavailable.
+   Keep core static behaviour usable when optional sync is unavailable. For the HTTP APIs
+   the firmware *does* expose, see [CAPTIVE-PORTAL-API-GUIDE.md](CAPTIVE-PORTAL-API-GUIDE.md)
+   (isolated Evil-Twin AP + `/api/<name>` JSON store) and
+   [LOCALSERVE-API-GUIDE.md](LOCALSERVE-API-GUIDE.md) (LAN serving + `/api/fetch` internet
+   proxy + `/api/save` file store + `/api/stat` heap).
 10. Build the project, run `python scripts/assemble.py` (which produces `sites/<mount>/`),
     preview `sites/` with any static server, and test assets, keyboard access and mobile
     layout. Update VALIDATION.md with evidence and limitations.
