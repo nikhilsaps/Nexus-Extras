@@ -151,6 +151,12 @@ checks that every launcher link resolves inside the web root.
 See [`docs/ADDING-A-SITE.md`](docs/ADDING-A-SITE.md) and
 [`docs/SITE-TEMPLATE.md`](docs/SITE-TEMPLATE.md) for details.
 
+For the firmware HTTP APIs a page can call, see
+[`docs/CAPTIVE-PORTAL-API-GUIDE.md`](docs/CAPTIVE-PORTAL-API-GUIDE.md) (isolated
+Evil-Twin SoftAP, `/api/<name>` JSON store, no internet) and
+[`docs/LOCALSERVE-API-GUIDE.md`](docs/LOCALSERVE-API-GUIDE.md) (LAN serving,
+`/api/fetch` internet proxy, `/api/save` file store, `/api/stat` heap).
+
 ## Note on the tool pages and payloads
 
 The captive-portal pages (`sites/captive/`) and BadUSB payloads (`duck/`) are used by the
