@@ -42,31 +42,40 @@ Sites are listed in the order they appear in the launcher. Each one lives under 
 and keeps its own look. The `kind` field in `metadata.json` groups them: `app` for games
 and pages, `tool` for device features.
 
-### 1. Chess Master — `/chess/` (app)
+### 1. Atlas — `/atlas/` (app)
+
+A personal "life OS": track anime, manga, movies and games plus finance,
+investments, to-dos and ideas. Local-first, stored as a single JSON blob in the
+browser. Built from its own repo ([Atlas](https://github.com/nikhilsaps/Atlas)) and
+deployed into `sites/atlas/` on the card; the launcher just links to it. The UI is
+mobile-friendly (off-canvas sidebar drawer on phones).
+
+### 2. Chess Master — `/chess/` (app)
 
 Play Stockfish, explore openings and practice tactics. The engine runs entirely in your
-browser; nothing is sent anywhere. Source lives in `sites/chess-master/`; the build is
-produced into `sites/chess/`.
+browser; nothing is sent anywhere. The layout is mobile-friendly (responsive board and a
+compact phone layout). Source lives in `sites/chess-master/`; the build is produced into
+`sites/chess/`.
 
 ![Chess Master — play](docs/screenshots/chess-master/play.png)
 ![Chess Master — learn](docs/screenshots/chess-master/learn.png)
 
-### 2. About Nexus — `/about.html` (app)
+### 3. About Nexus — `/about.html` (app)
 
 What this little web host is and how the firmware serves files.
 
 ![About Nexus](docs/screenshots/about/page.png)
 
-### 3. Nexus on GitHub — external (app)
+### 4. Nexus on GitHub — external (app)
 
 A tile linking to the firmware source. It opens off-device and needs internet.
 
-### 4. WiFi Sniffer — `/sniff/index.html` (tool)
+### 5. WiFi Sniffer — `/sniff/index.html` (tool)
 
 A live probe and client logger. It streams data captured by the device, so it only shows
 anything while **Sniffer mode** is running on the Cardputer (no static screenshot).
 
-### 5. Evil-Twin Pages — `/sites/captive/` (tool)
+### 6. Evil-Twin Pages — `/sites/captive/` (tool)
 
 The captive-portal page set for the Evil-Twin mode. These pages are picked and served from
 the device during a run, not browsed from the launcher, so the launcher shows them as an
@@ -155,7 +164,10 @@ For the firmware HTTP APIs a page can call, see
 [`docs/CAPTIVE-PORTAL-API-GUIDE.md`](docs/CAPTIVE-PORTAL-API-GUIDE.md) (isolated
 Evil-Twin SoftAP, `/api/<name>` JSON store, no internet) and
 [`docs/LOCALSERVE-API-GUIDE.md`](docs/LOCALSERVE-API-GUIDE.md) (LAN serving,
-`/api/fetch` internet proxy, `/api/save` file store, `/api/stat` heap).
+`/api/fetch` internet proxy, `/api/save` file store + delete, `/api/ls` directory
+listing, `/api/stat` heap). Rather than hand-rolling `fetch`, a served page can drop in
+the shared `sites/nexus.js` client, which auto-detects the LocalServe or captive backend
+and wraps every endpoint - see [`docs/NEXUS-CLIENT.md`](docs/NEXUS-CLIENT.md).
 
 ## Note on the tool pages and payloads
 

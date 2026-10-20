@@ -66,7 +66,14 @@ A successful write/delete returns `{"ok":true}`.
 
 ---
 
-## 3. The helper library: `api.js`
+## 3. The client library
+
+> **Use `nexus.js`, the unified client.** The same file documented in
+> `NEXUS-CLIENT.md` works here too: drop it in `/sites/captive/`, load it with
+> `<script type="module" src="/nexus.js"></script>`, and call `Nexus.get` /
+> `Nexus.save` / `Nexus.del`. It auto-detects the captive server and uses the
+> `/api/<name>` routes below. (`Nexus.proxy`/`list`/`stat` throw here, since the
+> captive AP has no internet.) The minimal `api.js` below is kept for tiny pages.
 
 Drop this file in `/sites/captive/` and include it from every page with
 `<script src="/api.js"></script>`. It is the entire backend contract, so every

@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nexus LocalServe API</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #161922;
+      --line: #2a2d35;
+      --text: #e6e6e6;
+      --dim: #8a93a6;
+      --accent: #8bd5ff;
+      --ok: #4ade80;
+      --amber: #fbbf24;
+      --red: #f87171;
+      --code: #0b0d12;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font:
+        15px/1.6 system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        sans-serif;
+    }
+    header {
+      padding: 1.6rem 1.2rem;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #161922, #0f1115);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    header p {
+      margin: 0.3rem 0 0;
+      color: var(--dim);
+    }
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 1.2rem;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      margin: 1.1rem 0;
+      overflow: hidden;
+    }
+    .card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 1rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      user-select: none;
+    }
+    .card > summary::-webkit-details-marker {
+      display: none;
+    }
+    .card > summary:hover {
+      background: #1b1f2a;
+    }
+    .m {
+      font: 12px/1 var(--mono);
+      font-weight: 700;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+    .GET {
+      background: #0e3a2e;
+      color: var(--ok);
+    }
+    .POST {
+      background: #13335a;
+      color: var(--accent);
+    }
+    .PUT {
+      background: #4a3a0e;
+      color: var(--amber);
+    }
+    .path {
+      font: 13px/1 var(--mono);
+      color: var(--text);
+    }
+    .sum-desc {
+      margin-left: auto;
+      color: var(--dim);
+      font-size: 0.85rem;
+    }
+    .body {
+      padding: 0 1.1rem 1.1rem;
+      border-top: 1px solid var(--line);
+    }
+    .body p {
+      color: var(--dim);
+    }
+    h3 {
+      margin: 1.1rem 0 0.4rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--dim);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    td,
+    th {
+      text-align: left;
+      padding: 0.35rem 0.5rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th {
+      color: var(--dim);
+      font-weight: 600;
+    }
+    code,
+    pre {
+      font-family: var(--mono);
+    }
+    code {
+      background: var(--code);
+      padding: 0.1rem 0.4rem;
+      border-radius: 6px;
+      color: var(--accent);
+    }
+    pre {
+      background: var(--code);
+      padding: 0.8rem;
+      border-radius: 10px;
+      overflow: auto;
+      margin: 0.4rem 0;
+      border: 1px solid var(--line);
+      font-size: 0.82rem;
+      max-height: 340px;
+    }
+    input,
+    textarea {
+      width: 100%;
+      background: var(--code);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.5rem;
+      font: inherit;
+    }
+    textarea {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      min-height: 72px;
+      resize: vertical;
+    }
+    label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--dim);
+      margin: 0.6rem 0 0.2rem;
+    }
+    button {
+      background: var(--accent);
+      color: #06121b;
+      border: 0;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.7rem;
+    }
+    button:hover {
+      filter: brightness(1.1);
+    }
+    button.sec {
+      background: #222734;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+    .row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+    .row > * {
+      flex: 1;
+      min-width: 140px;
+    }
+    .row button {
+      flex: 0 0 auto;
+    }
+    .out {
+      font-size: 0.8rem;
+      color: var(--dim);
+      margin-top: 0.3rem;
+    }
+    .out b {
+      color: var(--ok);
+    }
+    .out .e {
+      color: var(--red);
+    }
+    footer {
+      color: var(--dim);
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    a {
+      color: var(--accent);
+    }
+  </style>
+
+  <header>
+    <div class="wrap" style="padding: 0">
+      <h1>Nexus LocalServe API</h1>
+      <p>
+        Live, self-contained reference for the Cardputer HTTP server. Serve this
+        folder from the device and every panel below talks to the real API.
+      </p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <p style="color: var(--dim)">
+      Base URL is this page's own origin (<code id="origin"></code>). The server
+      lives in <code>localserve.cpp</code>; it streams files from the microSD
+      (<code>/sdcard/sites</code>) and never buffers a whole file in RAM. Five
+      routes exist; each is documented and runnable below.
+    </p>
+
+    <!-- ===================== GET /api/stat ===================== -->
+    <details class="card" open>
+      <summary>
+        <span class="m GET">GET</span><span class="path">/api/stat</span>
+        <span class="sum-desc">live heap, JSON</span>
+      </summary>
+      <div class="body">
+        <p>
+          Returns the device's free-RAM snapshot. Poll it to watch memory while
+          sites load.
+        </p>
+        <h3>Response</h3>
+        <pre>{ "free": 123456, "min_free": 90112, "largest_block": 65536 }</pre>
+        <table>
+          <tr>
+            <th>field</th>
+            <th>meaning</th>
+          </tr>
+          <tr>
+            <td><code>free</code></td>
+            <td>current free internal heap (bytes)</td>
+          </tr>
+          <tr>
+            <td><code>min_free</code></td>
+            <td>lowest free heap seen since boot</td>
+          </tr>
+          <tr>
+            <td><code>largest_block</code></td>
+            <td>biggest single allocatable block</td>
+          </tr>
+        </table>
+        <button onclick="getStat()">Run GET /api/stat</button>
+        <button class="sec" id="statPoll" onclick="togglePoll()">
+          Poll every 2s
+        </button>
+        <div class="out" id="statOut">&mdash;</div>
+        <pre id="statPre" hidden></pre>
+      </div>
+    </details>
+
+    <!-- ===================== GET /api/sniff.json ===================== -->
+    <details class="card">
+      <summary>
+        <span class="m GET">GET</span><span class="path">/api/sniff.json</span>
+        <span class="sum-desc">Wi-Fi sniffer results</span>
+      </summary>
+      <div class="body">
+        <p>
+          Snapshot of the passive Wi-Fi sniffer's device table. Only meaningful
+          while the <b>Sniff</b> tool has been running; otherwise the list is
+          empty. CORS is open (<code>Access-Control-Allow-Origin: *</code>) so
+          external dashboards can read it.
+        </p>
+        <h3>Response</h3>
+        <pre>
+{
+  "ch": 6, "frames": 10423, "devices": 2,
+  "list": [
+    { "mac":"a1:b2:c3:d4:e5:f6", "ssid":"CoffeeWiFi", "rssi":-61,
+      "ch":6, "type":"AP", "count":210, "age":3 }
+  ]
+}</pre
+        >
+        <table>
+          <tr>
+            <th>field</th>
+            <th>meaning</th>
+          </tr>
+          <tr>
+            <td><code>ch</code></td>
+            <td>channel the sniffer is parked on</td>
+          </tr>
+          <tr>
+            <td><code>frames</code></td>
+            <td>total frames seen this session</td>
+          </tr>
+          <tr>
+            <td><code>type</code></td>
+            <td>AP / STA / etc. per row</td>
+          </tr>
+          <tr>
+            <td><code>age</code></td>
+            <td>seconds since that device was last heard</td>
+          </tr>
+        </table>
+        <button onclick="getSniff()">Run GET /api/sniff.json</button>
+        <div class="out" id="sniffOut">&mdash;</div>
+        <pre id="sniffPre" hidden></pre>
+      </div>
+    </details>
+
+    <!-- ===================== GET/POST /api/fetch ===================== -->
+    <details class="card">
+      <summary>
+        <span class="m GET">GET</span><span class="m POST">POST</span>
+        <span class="path">/api/fetch</span>
+        <span class="sum-desc">HTTPS proxy</span>
+      </summary>
+      <div class="body">
+        <p>
+          The device fetches an upstream URL (its TLS bundle is built in) and
+          streams the body straight back. Useful to pull the open internet into
+          a page the Cardputer is hosting. The URL <b>must</b> start with
+          <code>http://</code> or <code>https://</code>. Needs the device to be
+          joined to a network with uplink.
+        </p>
+        <h3>Query parameters</h3>
+        <table>
+          <tr>
+            <th>key</th>
+            <th>required</th>
+            <th>meaning</th>
+          </tr>
+          <tr>
+            <td><code>url</code></td>
+            <td>yes</td>
+            <td>upstream URL (URL-encode it)</td>
+          </tr>
+          <tr>
+            <td><code>ref</code></td>
+            <td>no</td>
+            <td>Referer header to send upstream</td>
+          </tr>
+          <tr>
+            <td><code>ua</code></td>
+            <td>no</td>
+            <td>User-Agent override</td>
+          </tr>
+        </table>
+        <p>
+          Errors: <code>400</code> missing/bad url, <code>502</code> upstream
+          connect failed.
+        </p>
+        <label>URL to fetch</label>
+        <input id="fetchUrl" value="https://example.com/" />
+        <button onclick="doFetch()">Run GET /api/fetch</button>
+        <div class="out" id="fetchOut">&mdash;</div>
+        <pre id="fetchPre" hidden></pre>
+      </div>
+    </details>
+
+    <!-- ===================== PUT/POST /api/save ===================== -->
+    <details class="card">
+      <summary>
+        <span class="m PUT">PUT</span><span class="m POST">POST</span>
+        <span class="path">/api/save/&lt;path&gt;</span>
+        <span class="sum-desc">whole-file write to SD</span>
+      </summary>
+      <div class="body">
+        <p>
+          The raw request <b>body</b> becomes the file at
+          <code>/sdcard/sites/&lt;path&gt;</code>. Last-write-wins; the server
+          writes a temp file then renames it into place, so a failed save leaves
+          the old file intact. It never parses the body, so save anything (HTML,
+          JSON, binary).
+        </p>
+        <h3>Rules &amp; limits</h3>
+        <table>
+          <tr>
+            <td><code>SAVE_MAX</code></td>
+            <td>body &le; 4 MiB, else <code>413</code></td>
+          </tr>
+          <tr>
+            <td>path</td>
+            <td>
+              no <code>..</code>, no <code>\</code>, no control bytes, no
+              reserved <code>.nexus-tmp/.nexus-bak</code> sidecars &rarr; else
+              <code>400</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>409</code></td>
+            <td>
+              a save to the same path is already in flight, or a backup sidecar
+              from an interrupted save is still on the card
+            </td>
+          </tr>
+        </table>
+        <label
+          >Path under /sdcard/sites (e.g. <code>/api/hello.txt</code>)</label
+        >
+        <input id="saveName" value="/api/hello.txt" />
+        <label>Body to write</label>
+        <textarea id="saveBody">Hello from the Nexus API template.</textarea>
+        <div class="row">
+          <button onclick="doSave('PUT')">PUT save</button>
+          <button class="sec" onclick="doSave('POST')">POST save</button>
+          <button class="sec" onclick="verifySave()">Read it back (GET)</button>
+        </div>
+        <div class="out" id="saveOut">&mdash;</div>
+        <pre id="savePre" hidden></pre>
+      </div>
+    </details>
+
+    <!-- ===================== GET /* static ===================== -->
+    <details class="card">
+      <summary>
+        <span class="m GET">GET</span
+        ><span class="path">/&lt;anything&gt;</span>
+        <span class="sum-desc">static file serving</span>
+      </summary>
+      <div class="body">
+        <p>
+          Everything not under <code>/api/</code> is served as a file from
+          <code>/sdcard/sites</code>. A request for <code>/foo/</code> looks for
+          <code>/foo/index.html</code>. If a <code>.gz</code> twin exists and
+          the browser accepts gzip, the compressed copy is sent. Content-Type is
+          set from the file extension. Missing root &rarr; a built-in
+          "LocalServe is up" page; any other miss &rarr; <code>404</code>.
+        </p>
+        <label>Path to GET</label>
+        <input id="getPath" value="/captive/localserve-api.html" />
+        <button onclick="doGet()">Run GET</button>
+        <div class="out" id="getOut">&mdash;</div>
+        <pre id="getPre" hidden></pre>
+      </div>
+    </details>
+  </div>
+
+  <footer>
+    Served by Nexus LocalServe &middot; this page is a template &mdash; copy it,
+    keep the
+    <code>&lt;script&gt;</code> helpers, build your own UI on top.
+  </footer>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    $("origin").textContent = location.origin || "(serve me from the device)";
+
+    function show(outId, preId, ok, msg, body) {
+      $(outId).innerHTML = ok
+        ? "<b>" + msg + "</b>"
+        : "<span class='e'>" + msg + "</span>";
+      const pre = $(preId);
+      if (body === undefined) {
+        pre.hidden = true;
+      } else {
+        pre.hidden = false;
+        pre.textContent = body;
+      }
+    }
+    function pretty(t) {
+      try {
+        return JSON.stringify(JSON.parse(t), null, 2);
+      } catch (e) {
+        return t;
+      }
+    }
+
+    async function getStat() {
+      try {
+        const t0 = performance.now();
+        const r = await fetch("/api/stat", { cache: "no-store" });
+        const t = await r.text();
+        const ms = Math.round(performance.now() - t0);
+        show(
+          "statOut",
+          "statPre",
+          r.ok,
+          r.status + " " + r.statusText + " (" + ms + " ms)",
+          pretty(t),
+        );
+      } catch (e) {
+        show("statOut", "statPre", false, "network error: " + e.message);
+      }
+    }
+    let pollId = null;
+    function togglePoll() {
+      if (pollId) {
+        clearInterval(pollId);
+        pollId = null;
+        $("statPoll").textContent = "Poll every 2s";
+        return;
+      }
+      getStat();
+      pollId = setInterval(getStat, 2000);
+      $("statPoll").textContent = "Stop polling";
+    }
+
+    async function getSniff() {
+      try {
+        const r = await fetch("/api/sniff.json", { cache: "no-store" });
+        const t = await r.text();
+        let n = "?";
+        try {
+          n = JSON.parse(t).devices;
+        } catch (e) {}
+        show(
+          "sniffOut",
+          "sniffPre",
+          r.ok,
+          r.status + " " + r.statusText + " - " + n + " device(s)",
+          pretty(t),
+        );
+      } catch (e) {
+        show("sniffOut", "sniffPre", false, "network error: " + e.message);
+      }
+    }
+
+    async function doFetch() {
+      const u = $("fetchUrl").value.trim();
+      if (!u) {
+        show("fetchOut", "fetchPre", false, "enter a URL first");
+        return;
+      }
+      try {
+        const r = await fetch("/api/fetch?url=" + encodeURIComponent(u), {
+          cache: "no-store",
+        });
+        const t = await r.text();
+        const ct = r.headers.get("content-type") || "";
+        show(
+          "fetchOut",
+          "fetchPre",
+          r.ok,
+          r.status +
+            " " +
+            r.statusText +
+            "  [" +
+            ct +
+            "]  " +
+            t.length +
+            " bytes",
+          t.slice(0, 4000) + (t.length > 4000 ? "\n...(truncated)" : ""),
+        );
+      } catch (e) {
+        show("fetchOut", "fetchPre", false, "network error: " + e.message);
+      }
+    }
+
+    async function doSave(method) {
+      const p = $("saveName").value.trim();
+      const b = $("saveBody").value;
+      if (!p.startsWith("/")) {
+        show("saveOut", "savePre", false, "path must start with /");
+        return;
+      }
+      try {
+        const r = await fetch("/api/save" + p, { method, body: b });
+        const t = await r.text();
+        show(
+          "saveOut",
+          "savePre",
+          r.ok,
+          method + " " + r.status + " " + r.statusText,
+          t || "(empty body = success)",
+        );
+      } catch (e) {
+        show("saveOut", "savePre", false, "network error: " + e.message);
+      }
+    }
+    async function verifySave() {
+      const p = $("saveName").value.trim();
+      try {
+        const r = await fetch(p, { cache: "no-store" });
+        const t = await r.text();
+        show("saveOut", "savePre", r.ok, "GET " + p + " -> " + r.status, t);
+      } catch (e) {
+        show("saveOut", "savePre", false, "network error: " + e.message);
+      }
+    }
+
+    async function doGet() {
+      const p = $("getPath").value.trim() || "/";
+      try {
+        const r = await fetch(p, { cache: "no-store" });
+        const t = await r.text();
+        const ct = r.headers.get("content-type") || "";
+        const enc = r.headers.get("content-encoding");
+        show(
+          "getOut",
+          "getPre",
+          r.ok,
+          r.status +
+            " " +
+            r.statusText +
+            "  [" +
+            ct +
+            "]" +
+            (enc ? "  enc:" + enc : "") +
+            "  " +
+            t.length +
+            " bytes",
+          t.slice(0, 4000) + (t.length > 4000 ? "\n...(truncated)" : ""),
+        );
+      } catch (e) {
+        show("getOut", "getPre", false, "network error: " + e.message);
+      }
+    }
+
+    getStat();
+  </script>
+</html>

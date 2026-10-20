@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toit Brewery | Guest Wi-Fi</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        color: #fff;
+        background:
+          linear-gradient(rgba(10, 15, 12, 0.78), rgba(10, 15, 12, 0.94)),
+          radial-gradient(circle at top, #52613a, #111713 70%);
+      }
+
+      .login-card {
+        width: 100%;
+        max-width: 410px;
+        padding: 38px 30px;
+        text-align: center;
+        border: 1px solid rgba(220, 180, 90, 0.35);
+        border-radius: 18px;
+        background: rgba(22, 28, 23, 0.96);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+      }
+
+      .brand {
+        color: #e3bd68;
+        font-size: 42px;
+        font-weight: 900;
+        letter-spacing: 5px;
+      }
+
+      .subtitle {
+        margin-top: 8px;
+        color: #c7c9bf;
+        font-size: 12px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
+
+      .beer-icon {
+        font-size: 43px;
+        margin: 25px 0 15px;
+      }
+
+      h2 {
+        font-size: 23px;
+        margin-bottom: 10px;
+      }
+
+      .description {
+        color: #b7bcb4;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 25px;
+      }
+
+      .input-group {
+        text-align: left;
+        margin-bottom: 17px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #e4dfd2;
+        font-size: 13px;
+      }
+
+      input {
+        width: 100%;
+        padding: 14px;
+        border: 1px solid #424a40;
+        border-radius: 9px;
+        outline: none;
+        background: #202720;
+        color: #fff;
+        font-size: 15px;
+        transition: border-color 0.2s;
+      }
+
+      input:focus {
+        border-color: #e3bd68;
+      }
+
+      input::placeholder {
+        color: #858b82;
+      }
+
+      .phone-input {
+        display: flex;
+        gap: 9px;
+      }
+
+      .country-code {
+        width: 76px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #202720;
+        border: 1px solid #424a40;
+        border-radius: 9px;
+        color: #e3bd68;
+        font-size: 14px;
+      }
+
+      .phone-input input {
+        min-width: 0;
+      }
+
+      .login-btn {
+        width: 100%;
+        padding: 15px;
+        margin-top: 7px;
+        border: none;
+        border-radius: 9px;
+        background: #d9b45f;
+        color: #171a14;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .login-btn:hover {
+        background: #efcc7d;
+        transform: translateY(-1px);
+      }
+
+      .terms {
+        margin-top: 20px;
+        color: #8d9589;
+        font-size: 11px;
+        line-height: 1.7;
+      }
+
+      .terms a {
+        color: #d9b45f;
+        text-decoration: none;
+      }
+
+      #message {
+        display: none;
+        margin-top: 17px;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .footer {
+        margin-top: 24px;
+        color: #7e857a;
+        font-size: 11px;
+        letter-spacing: 1px;
+      }
+
+      @media (max-width: 420px) {
+        .login-card {
+          padding: 30px 22px;
+        }
+
+        .brand {
+          font-size: 36px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="login-card">
+      <div class="brand">TOIT</div>
+      <div class="subtitle">Brewery · Kitchen · Taproom</div>
+
+      <div class="beer-icon" aria-hidden="true">🍺</div>
+
+      <h2>Good Times. Great Wi-Fi.</h2>
+      <p class="description">
+        Welcome to Toit! Enter your details below to get connected to our guest
+        Wi-Fi.
+      </p>
+
+      <form id="wifiForm">
+        <div class="input-group">
+          <label for="name">Your Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter your full name"
+            autocomplete="name"
+            minlength="2"
+            maxlength="80"
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="phone">Mobile Number</label>
+          <div class="phone-input">
+            <div class="country-code">🇮🇳 +91</div>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="10-digit number"
+              inputmode="numeric"
+              autocomplete="tel-national"
+              pattern="[6-9][0-9]{9}"
+              maxlength="10"
+              required
+            />
+          </div>
+        </div>
+
+        <button type="submit" class="login-btn">CONNECT TO WI-FI →</button>
+      </form>
+
+      <div id="message" role="status" aria-live="polite"></div>
+
+      <p class="terms">
+        By continuing, you agree to our
+        <a href="#" id="termsLink">Terms & Conditions</a>
+        and guest Wi-Fi policy.
+      </p>
+
+      <div class="footer">BREWED WITH LOVE · BENGALURU</div>
+    </main>
+
+    <script>
+      const form = document.getElementById("wifiForm");
+      const message = document.getElementById("message");
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const name = document.getElementById("name").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+
+        if (name.length < 2) {
+          showMessage("Please enter your name.", false);
+          return;
+        }
+
+        if (!/^[6-9]\d{9}$/.test(phone)) {
+          showMessage(
+            "Please enter a valid 10-digit Indian mobile number.",
+            false,
+          );
+          return;
+        }
+
+        showMessage(
+          "Thanks, " +
+            name +
+            "! Your details have been validated. " +
+            "Connect this page to the brewery's Wi-Fi authentication " +
+            "system to complete your connection.",
+          true,
+        );
+      });
+
+      function showMessage(text, success) {
+        message.style.display = "block";
+        message.style.background = success ? "#263c29" : "#472727";
+        message.style.color = success ? "#b8efbd" : "#ffb7b7";
+        message.textContent = text;
+      }
+
+      document
+        .getElementById("termsLink")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+          alert("Please contact the venue for its official guest Wi-Fi terms.");
+        });
+    </script>
+  </body>
+</html>

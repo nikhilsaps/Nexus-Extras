@@ -745,3 +745,66 @@ button.tiny, .ghost.tiny {
 .q-help { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 0.86rem; line-height: 1.4; }
 .q-log { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem; }
 .q-log li { padding: 6px 8px; background: var(--faint); border-radius: 6px; }
+
+/* ===== phone: app-like compact layout (<=560px) ===== */
+@media (max-width: 560px) {
+  .app {
+    padding: 10px 10px 18px;
+    gap: 11px;
+  }
+  .topbar {
+    flex-wrap: wrap;
+    gap: 8px 10px;
+  }
+  .topbar h1 {
+    font-size: 1.1rem;
+  }
+  .logo {
+    font-size: 1.5rem;
+  }
+  .tagline {
+    display: none;
+  }
+  .modenav {
+    margin-right: 0;
+    order: 3;
+    width: 100%;
+  }
+  .modenav button {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 10px;
+  }
+  .status-pill {
+    order: 2;
+    margin-left: auto;
+  }
+  .board-area {
+    padding: 10px;
+  }
+  .board-row {
+    gap: 7px;
+  }
+  .eval-bar {
+    width: 16px;
+  }
+  .panel-body {
+    padding: 12px 12px 14px;
+    min-height: 0;
+  }
+  .tabs button {
+    font-size: 0.78rem;
+    padding: 8px 3px;
+  }
+  .button-row button {
+    min-width: 72px;
+  }
+}
+
+/* avoid any horizontal overflow on small screens */
+@media (max-width: 860px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+}

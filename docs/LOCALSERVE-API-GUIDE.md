@@ -7,9 +7,10 @@
 > and its simple `/api/<name>` store, see `CAPTIVE-PORTAL-API-GUIDE.md`.
 
 LocalServe serves `/sites/` off the microSD at `http://<device-ip>/`. It adds
-three things the captive server does not have: an **internet proxy**
-(`/api/fetch`), a **file store** (`/api/save` + plain `GET`), and a **heap-stats**
-endpoint (`/api/stat`). This is the server to build against for anything that
+four things the captive server does not have: an **internet proxy**
+(`/api/fetch`), a **file store** with full CRUD (`/api/save` + plain `GET` +
+`DELETE` + an `/api/ls` directory listing), and a **heap-stats** endpoint
+(`/api/stat`). This is the server to build against for anything that
 fetches data from the web -- an Akashic-style reader, a dashboard that calls an
 API, etc.
 
@@ -43,6 +44,8 @@ your WiFi (STA) or a USB link; open the IP it shows.
 |------|--------|--------|
 | `/<path>` | `GET` | read a file from `/sites/` (your app, or JSON you saved). 404 if missing |
 | `/api/save/<path>` | `PUT` or `POST` | write the request body to `/sites/<path>` (temp + atomic rename) |
+| `/api/save/<path>` | `DELETE` | remove `/sites/<path>`. 404 if missing, 409 if it is a directory |
+| `/api/ls?path=<dir>` | `GET` | list a directory under `/sites` as JSON (see below). `path` optional; omit or `/` = web root |
 | `/api/fetch?url=<abs url>` | `GET` | proxy: stream back any `http(s)` URL (CORS-free) |
 | `/api/fetch?url=<abs url>` | `POST` | proxy a POST: relays your body + `Content-Type` to the upstream |
 | `/api/stat` | `GET` | `{"free":N,"min_free":N,"largest_block":N}` heap stats |
@@ -52,7 +55,23 @@ your WiFi (STA) or a USB link; open the IP it shows.
 There is **no `/api/<name>` key store** here (that is the captive server). You
 write JSON with `POST /api/save/data/library.json` and read it back with
 `GET /data/library.json`. A missing file returns 404; treat that as "empty".
-There is no delete -- overwrite with an empty/default body instead.
+Remove a file with `DELETE /api/save/data/library.json` (404 if it was never
+there, 409 if the path is a directory); both write and delete return
+`{"ok":true}`.
+
+### Listing a directory
+
+`GET /api/ls?path=/sub` returns the contents of a folder under `/sites` so a
+page can browse what it has saved instead of guessing filenames:
+
+```json
+{ "path": "/sub",
+  "entries": [ { "name": "library.json", "size": 412, "dir": false },
+                { "name": "covers",        "size": 0,   "dir": true  } ] }
+```
+
+`path` is optional (omit it or pass `/` to list the web root). Hidden dotfiles
+and the reserved `.nexus-*` sidecars are left out. Unknown folder -> 404.
 
 ### The proxy = a dumb pass-through
 
@@ -84,7 +103,14 @@ the menu (a clean boot restores the display). There is no "resume display" path.
 
 ---
 
-## 3. The helper library: `ls.js`
+## 3. The client library
+
+> **Use `nexus.js`, the unified client.** One file works on **both** Nexus
+> servers (LocalServe and the captive portal) and in both loading styles
+> (`import` in a bundled web app, or a module `<script>` that exposes a global
+> `Nexus` for plain HTML). It covers `get` / `save` / `del` / `list` /
+> `update` / `proxy` / `stat`. See **`NEXUS-CLIENT.md`** for the full reference.
+> The minimal `ls.js` below is kept for tiny single-page cases.
 
 Drop this in `/sites/` and import it from your page.
 
@@ -179,6 +205,8 @@ curl -X POST --data-binary @library.json \
 curl "http://<ip>/api/fetch?url=https%3A%2F%2Fapi.github.com%2Frepos%2Fnikhilsaps%2FAtlas"  # GET proxy
 curl -X POST -H 'Content-Type: application/json' --data '{"query":"..."}' \
   "http://<ip>/api/fetch?url=https%3A%2F%2Fapi.example.com%2Fgraphql"   # POST proxy
+curl -X DELETE http://<ip>/api/save/data/library.json           # delete
+curl "http://<ip>/api/ls?path=/data"                             # list a folder
 curl http://<ip>/api/stat                                       # heap
 ```
 
